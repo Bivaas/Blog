@@ -17,6 +17,13 @@ firebase
 react-hot-toast 
 framer-motion
 
+express
+mongose
+cors
+bycriptjs
+jwt
+dotenv
+
 
 # Everything I've used: 
 

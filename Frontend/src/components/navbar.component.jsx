@@ -1,7 +1,16 @@
+import { Link } from "react-router-dom";
+import logo from "../imgs/logo.png";
+
 const Navbar = () => { 
 
     return ( 
-        <h1>Navbar</h1>
+        <nav className="navbar">
+            <Link to="/" className="flex-none w-10">
+            
+                <img src={logo} className="w-full" />
+
+            </Link>
+        </nav>
     )
 }
 
