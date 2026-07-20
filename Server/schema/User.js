@@ -1,0 +1,77 @@
+import mongoose, { Schema } from "mongoose";
+
+let profile_imgs_name_list = ["John", "David", "Annie", "Cleo", "Bob", "Leo", "Angel", "Jack" ];
+let profile_imgs_collections_list = ["notionists-neutral", "adventurer-neutral", "fun-emoji"];
+
+const userSchema = mongoose.schema({
+
+    personal_info: {
+        fullname: {
+            type: String,
+            lowercase: true,
+            required: true,
+            minlength: [3, 'your name should be at lease 3 letters long !'],
+        },
+
+        email:  {
+            type: String,
+            required: true,
+            lowercase: true,
+            unique: true 
+        },
+
+        password: String,
+        username: { 
+            type: String,
+            minlength: [3, `your username should be min 3 letters long !`],
+            unique: true,
+        },
+
+
+        bio: { 
+            type: String,
+            maxlength: [200, 'keep the bio shorter than 200 words !'],
+            default: "",
+        },
+
+        profile_img: {
+            type: String,
+            dafault: () => {
+                return `https://api.dicebar.com/6.x/${profile_imgs_collections_list[Math.floor(Math.random() * profile_imgs_collections_list.length)]}/svg?seed=${profile_imgs_name_list}[Math.floor(Math.random() * profile_imgs_name_list.length)]}`
+            }
+        },
+    },
+
+
+    account_info:{
+        total_posts: { 
+            type: Number,
+            default: 0
+        },
+
+        total_reads: {
+            type: Number,
+            default: 0
+        },
+    },
+
+    google_auth: {
+        type: Boolean,
+        default: false
+    },
+
+    blogs: {
+        type: [ Schema.Types.ObjectId ],
+        ref: 'blogs',
+        default: [],
+    }
+
+},
+{ 
+    timestamps: {
+        createdAt: 'joinedAt'
+    }
+})
+
+
+export default mongoose.model("users", userSchema);

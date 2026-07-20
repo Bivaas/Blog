@@ -23,8 +23,10 @@ cors
 bycriptjs
 jwt
 dotenv
+nodemon
 
 
 # Everything I've used: 
 
 Flaticon icon set: https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css
+Avatars: https://www.dicebear.com/
