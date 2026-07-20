@@ -42,8 +42,41 @@ const userSchema = mongoose.schema({
         },
     },
 
+    social_links: {
 
-    account_info:{
+        youtube: { 
+            type: String,
+            default: "",
+        },
+
+        instagram: { 
+            type: String,
+            default: "",
+        },
+
+        facebook: { 
+            type: String,
+            default: "",
+        },
+
+        twitter: { 
+            type: String,
+            default: "",
+        },
+
+        github: { 
+            type: String, 
+            default: "",
+        },
+
+        website: {
+            type: String,
+            default: "",
+        }
+    },
+
+
+    account_info: {
         total_posts: { 
             type: Number,
             default: 0
