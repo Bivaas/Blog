@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import 'dotenv/config';
+import bycript from 'bycryptjs';
+import User from './Schema/User.js';
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -37,7 +39,27 @@ server.post("/signup", (req, res) => {
         return res.status(403).json({ "error": "password should be 6-20 characters with lowercase and uppercase and number" })
     }
 
-    return res.status(200).json({ "status": "okay" })
+
+    // password hash
+    bcrypt.hash(password, 10, (err, hashed_password) => {
+
+        let username = email.split("@")[0];
+
+        let user = new User({
+            personal_info: { fullname, email, password: hashed_password, username}
+        })
+
+        user.save().then((u) => {
+
+            return res.status(200).json({ user: u })
+        })
+
+        .catch(err => {
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+
+
 })
 
 
