@@ -4,6 +4,8 @@ import 'dotenv/config';
 import bycript from 'bycryptjs';
 import User from './Schema/User.js';
 
+import { nanoid } from 'nanoid';
+
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
@@ -15,6 +17,18 @@ server.use(express.json());
 mongoose.connect(process.env.DB_LOCATION, {
     autoIndex: true
 })
+
+
+const generateUsername = async (email) => {
+
+    let username = email.split("@")[0];
+
+    let isUsernameNotUnique = await User.exists({ "personal_info.username": username}).then((result) => result)
+
+    isUsernameNotUnique ? username += nanoid().substring(0, 5): "";
+
+    return username;
+}
 
 
 // new acc signup req to server
@@ -54,8 +68,16 @@ server.post("/signup", (req, res) => {
             return res.status(200).json({ user: u })
         })
 
-        .catch(err => {
+    
+        .catch(err => { 
+
+            // doing email validation because same req is sent twice
+            if(err.code ==11000) {
+                return res.status(500).json({ "error": "your email already exists !!"})
+            }
+
             return res.status(500).json({ "error": err.message })
+
         })
     })
 
