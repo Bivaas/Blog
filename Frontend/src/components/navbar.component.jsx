@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import logo from "../imgs/logo.png";
 
 const Navbar = () => { 
 
@@ -12,7 +11,7 @@ const Navbar = () => {
 
             <Link to="/" className="flex-none w-10">
             
-                <img src={logo} className="w-full" />
+                <img src="/favicon.svg" className="w-full" alt="Logo" />
 
             </Link>
 
