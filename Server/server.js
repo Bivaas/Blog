@@ -5,6 +5,7 @@ import bycript from 'bycryptjs';
 import User from './Schema/User.js';
 
 import { nanoid } from 'nanoid';
+import jwt from 'jsonwebtoken';
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -18,10 +19,23 @@ mongoose.connect(process.env.DB_LOCATION, {
     autoIndex: true
 })
 
+// usr mongo id encryption with jwt
+const formatDatatoSend = (user) => {
+
+    const access_token = jwt.sign({ id: user._id }, process.env.SECRET_KEY)
+
+    return { 
+        access_token,
+        profile_img: user.personal_info.profile_img,
+        username: user.personal_info.username,
+        fullname: user.personal_info.fullname
+    }
+}
+
 
 const generateUsername = async (email) => {
 
-    let username = email.split("@")[0];
+    let username = await generateUsername(email);
 
     let isUsernameNotUnique = await User.exists({ "personal_info.username": username}).then((result) => result)
 
@@ -55,7 +69,7 @@ server.post("/signup", (req, res) => {
 
 
     // password hash
-    bcrypt.hash(password, 10, (err, hashed_password) => {
+    bcrypt.hash(password, 10, async (err, hashed_password) => {
 
         let username = email.split("@")[0];
 
@@ -65,7 +79,7 @@ server.post("/signup", (req, res) => {
 
         user.save().then((u) => {
 
-            return res.status(200).json({ user: u })
+            return res.status(200).json(formatDatatoSend(u))
         })
 
     
