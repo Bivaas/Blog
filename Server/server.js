@@ -68,6 +68,46 @@ server.post("/signup", (req, res) => {
     }
 
 
+    // usr sign in route 
+    server.post("/signin", (req, res) => {
+
+        let { email, password } = req.body;
+
+        User.findOne({ "personal_info.email": email }).then((user) => {
+
+            if(!user) {
+
+                return res.status(403).json({ "error": "Invalid credentials !!"})
+            }
+
+            
+            bcrypt.compare(password, user.personal_info.password, (err, result) => {
+
+                if (err) {
+
+                    return res.status(403).json({ "error": "error...try again "})
+                }
+
+                if (!result) {
+
+                    return res.status(403).json({ "error": "invalid password !!"})
+                   } 
+                   else { 
+
+                    return res.status(200).json(formatDatatoSend(user))
+                   }
+
+            })
+
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+
+
     // password hash
     bcrypt.hash(password, 10, async (err, hashed_password) => {
 
