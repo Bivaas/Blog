@@ -1,6 +1,8 @@
 import InputBox from "../components/input.component";
 
 import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
+import { storeInSession } from "../common/session";
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -15,12 +17,12 @@ const UserAuthForm = ({ type }) => {
         axios.post(import.meta.env.VITE_DOMAIN + serverRoute, formData)
         .then(( { data }) => {
 
-            console.log(data);
+            storeInSession("user", JSON.stringify(data));
         })
 
         .catch(({ response }) => {
 
-            console.log(response.data.error);
+            toast.error(response.data.error);
         })
     }
 
@@ -44,7 +46,7 @@ const UserAuthForm = ({ type }) => {
 
             if(fullname.length < 3) {
 
-                return console.log("name should be 3 letters minimum ");
+                return toast.error("name should be 3 letters minimum ");
             }
 
         }
@@ -74,7 +76,7 @@ const UserAuthForm = ({ type }) => {
     return ( 
         
         <section className="h-cover flex items-center justify-center">
-
+            <Toaster />
             <form id="formElement" className="w-[80%] max-w-[400px]">
 
                 <h1 className="text-4xl font-gelasio capitalize text-center mb-24">
