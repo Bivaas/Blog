@@ -1,5 +1,4 @@
 import InputBox from "../components/input.component";
-import { useRef } from "react";
 
 import axios from "axios";
 
@@ -9,13 +8,28 @@ let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
 const UserAuthForm = ({ type }) => {
 
-    let authForm = useRef();
+
+    // server cell function
+    const userAuthThroughServer = (serverRoute, formData) => {
+
+        axios.post(import.meta.env.VITE_DOMAIN + serverRoute, formData)
+        .then(( { data }) => {
+
+            console.log(data);
+        })
+
+        .catch(({ response }) => {
+
+            console.log(response.data.error);
+        })
+    }
+
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
 
-        let form = new FormData(authForm.current);
+        let form = new FormData(formElement);
         let formData = {};
 
         for(let [key, value] of form.entries()) {
@@ -51,12 +65,17 @@ const UserAuthForm = ({ type }) => {
         }
     }
 
+    
+    let serverRoute = type == "sign-in" ? "/signin" : "/signup";
+
+    userAuthThroughServer(serverRoute, formData);
+
 
     return ( 
         
         <section className="h-cover flex items-center justify-center">
 
-            <form ref={authForm} className="w-[80%] max-w-[400px]">
+            <form id="formElement" className="w-[80%] max-w-[400px]">
 
                 <h1 className="text-4xl font-gelasio capitalize text-center mb-24">
                     {type == "sign-in" ? "Welcome back" : "Join us today" }

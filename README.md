@@ -25,6 +25,11 @@ jwt
 dotenv
 nodemon
 
+# Use of AI 
+
+error diagnosis 
+frontend validations
+
 
 # Everything I've used: 
 

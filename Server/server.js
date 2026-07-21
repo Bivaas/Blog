@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import bycript from 'bycryptjs';
@@ -14,6 +15,7 @@ const server = express();
 let PORT = 3000;
 
 server.use(express.json());
+server.use(cors());
 
 mongoose.connect(process.env.DB_LOCATION, {
     autoIndex: true

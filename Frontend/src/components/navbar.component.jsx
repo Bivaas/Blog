@@ -44,9 +44,9 @@ const Navbar = () => {
                     <p>Write</p>
                 </Link>
 
-                <link className="btn-dark py-2" to="/signin">
+                <Link className="btn-dark py-2" to="/signin">
                     Sign In
-                </link>
+                </Link>
 
                 <Link className="btn-light py-2 hidden md:block" to="/signup">
                     Sign Up
