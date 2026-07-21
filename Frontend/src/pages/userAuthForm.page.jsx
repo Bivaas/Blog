@@ -4,8 +4,14 @@ import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { storeInSession } from "../common/session";
 
+import { useContext } from "react";
+import { UserContext } from "../App";
+import { Navigate } from "react-router-dom";
+
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+
+let { userAuth: { access_token }, setUserAuth } = useContext(UserContext);
 
 
 const UserAuthForm = ({ type }) => {
@@ -18,6 +24,7 @@ const UserAuthForm = ({ type }) => {
         .then(( { data }) => {
 
             storeInSession("user", JSON.stringify(data));
+            setUserAuth(data);
         })
 
         .catch(({ response }) => {
@@ -74,6 +81,9 @@ const UserAuthForm = ({ type }) => {
 
 
     return ( 
+
+        access_token ? 
+        <Navigate to="/" /> :
         
         <section className="h-cover flex items-center justify-center">
             <Toaster />
