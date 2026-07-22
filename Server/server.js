@@ -8,6 +8,10 @@ import User from './Schema/User.js';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
+import admin from 'firebase-admin';
+import serviceAccountKey from './blog-firebase-adminsdk.json' with { type: "json" };
+import { getAuth } from 'firebase-admin/auth';
+
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
@@ -16,6 +20,10 @@ let PORT = 3000;
 
 server.use(express.json());
 server.use(cors());
+
+admin.initializeApp ({ 
+    credential: admin.credential.cert(serviceAccountKey)
+})
 
 mongoose.connect(process.env.DB_LOCATION, {
     autoIndex: true
@@ -108,6 +116,82 @@ server.post("/signup", (req, res) => {
             return res.status(500).json({ "error": err.message })
         })
     })
+
+
+    // google authentication and login / signup path setup with token verification
+    server.post ("/google-auth", async (req, res) => {
+
+        let { access_token } = req.body;
+
+        getAuth()
+        .verifyIdToken(access_token)
+        .then(async (decodedUser) => {
+
+            let { email, name, picture } = decodedUser;
+
+            // asking google for bigger img
+            picture = picture.replace("s96-c", "s384-c");
+            
+            
+            let user = await User.findOne({ "personal_info.email": email })
+
+            .select("personal_info.fullname personal_info.username personal_info.profile_img google_auth")
+            .then((u) => {
+
+                return u || null
+            })
+
+            .catch(err => {
+
+                return res.status(500).json({ "error": err.message })
+            })
+
+
+            if (user) {
+                // login
+                if (!user.google_auth) {
+
+                    return res.status(403).json ({ "error": "log in with your password to access this account" })
+                }
+
+                else { 
+
+                    return res.status(403).json({ "error": "Google account exists, try signing in with google "})
+                }
+    
+            // new acc signup
+            } else { 
+
+                let username = await generateUsername(email);
+
+                user = new User({ 
+
+                    personal_info: { fullname: name, email, username },
+                    google_auth: true
+
+                })
+
+                await user.save().then((u) => {
+
+                    user = u;
+                })
+
+                .catch(err => {
+
+                    return res.status(500).json({ "error": err.message })
+                })
+            }
+
+            return res.status(200).json(formatDatatoSend(user))
+
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": "Failed google authentication, try again !!"})
+        })
+    })
+
 
 
     // password hash

@@ -29,6 +29,7 @@ nodemon
 
 error diagnosis 
 frontend validations
+proper implementation of Authentication and Authorization
 
 
 # Everything I've used: 

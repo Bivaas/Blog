@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .env
+*blog-firebase-adminsdk.json
 
 # Editor directories and files
 .vscode/*
