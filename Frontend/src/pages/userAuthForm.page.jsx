@@ -1,5 +1,4 @@
 import InputBox from "../components/input.component";
-
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import { storeInSession } from "../common/session";
@@ -7,6 +6,8 @@ import { storeInSession } from "../common/session";
 import { useContext } from "react";
 import { UserContext } from "../App";
 import { Navigate } from "react-router-dom";
+
+import { authWithGoogle } from "../common/firebase";
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -29,6 +30,24 @@ const UserAuthForm = ({ type }) => {
         .catch(({ response }) => {
 
             toast.error(response.data.error);
+        })
+    }
+
+
+    // google login setup
+    const handleGoogleAuth = (e) => {
+
+        e.preventDefault();
+
+        authWithGoogle().then(user => {
+
+            console.log(user);
+        })
+
+        .catch(err => {
+
+            toast.error("could not sign in with google !");
+            return console.log(err);
         })
     }
 
@@ -122,6 +141,12 @@ const UserAuthForm = ({ type }) => {
                     <button type="submit" onClick={handleSubmit}>
 
                         {type.replace("-", " ") }
+                    </button>
+
+
+                    <button type="button" onClick={handleGoogleAuth}>
+
+                        Login with Google..
                     </button>
 
 
