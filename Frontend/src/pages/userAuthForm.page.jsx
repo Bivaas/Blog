@@ -5,9 +5,10 @@ import { storeInSession } from "../common/session";
 
 import { useContext } from "react";
 import { UserContext } from "../App";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
 import { authWithGoogle } from "../common/firebase";
+import googleIcon from "../imgs/google.png";
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -142,19 +143,48 @@ const UserAuthForm = ({ type }) => {
                     icon="fi-rr-key"
                     />
 
-                    <button type="submit" onClick={handleSubmit}>
+
+                    <button className="btn-dark center mt-14" type="submit" onClick={handleSubmit}>
 
                         {type.replace("-", " ") }
                     </button>
 
 
-                    <button type="button" onClick={handleGoogleAuth}>
+                    <div className="relative w-full flex items-center gap-2 my-10 uppercase text-black font-bold">
 
+                        <hr className="w-1/2 border-black" />
+                        <p>or</p>
+                        <hr className="1-1/2 border-black" />
+                    </div>
+
+
+                    <button className="btn-dark flex items-center justify gap-4 w-[90%] center" type="button" onClick={handleGoogleAuth}>
+
+                    <img src={googleIcon} className="w-5" />
                         Login with Google..
                     </button>
 
 
             </form>
+
+
+            {/* opposite form link depending on the current page */}
+            {
+                type =="sign-in" ?
+
+                <p className="mt-6 text-dark-grey text-xl text-center">
+                    No account ? 
+                    <Link to="/signup" className="text-black text-xl ml-1">Sign up</Link>
+                </p>
+
+                :
+
+                <p className="mt-6 text-dark-grey text-xl text-center">
+                    Got an account ? 
+                    <Link to="/signin" className="text-black text-xl ml-1">Sign in</Link>
+                </p>
+            }
+
 
         </section>
 
