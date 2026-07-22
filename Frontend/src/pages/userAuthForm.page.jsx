@@ -11,11 +11,10 @@ import { Navigate } from "react-router-dom";
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
-let { userAuth: { access_token }, setUserAuth } = useContext(UserContext);
-
 
 const UserAuthForm = ({ type }) => {
 
+    let { userAuth: { access_token }, setUserAuth } = useContext(UserContext);
 
     // server cell function
     const userAuthThroughServer = (serverRoute, formData) => {
@@ -72,12 +71,13 @@ const UserAuthForm = ({ type }) => {
 
             return console.log("invalid password format..use 6-20 chars, lowercase, uppercase and numbers");
         }
+
+        userAuthThroughServer(serverRoute, formData);
+
     }
 
     
     let serverRoute = type == "sign-in" ? "/signin" : "/signup";
-
-    userAuthThroughServer(serverRoute, formData);
 
 
     return ( 

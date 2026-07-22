@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
+
+import { UserContext } from "../App";
+import UserNavigationPanel from "./user-navigation.component";
 
 const Navbar = () => { 
 
-    const [ searchBoxVisibility, setSearchVisibility ] = useState(false);
+    const [ searchBoxVisibility, setSearchBoxVisibility ] = useState(false);
+
+    const { userAuth, userAuth: { access_token, profile_img } } = useContext(UserContext)
 
     return ( 
         <>
@@ -27,7 +32,7 @@ const Navbar = () => {
 
             </div>
 
-            <div className="flex items-center gapp-3 md:gap-6 ml-auto">
+            <div className="flex items-center gap-3 md:gap-6 ml-auto">
 
                 <button className="md:hidden bg-grey w-12 h-12 rounded-full flex items-center justify-center" 
                 
@@ -44,14 +49,25 @@ const Navbar = () => {
                     <p>Write</p>
                 </Link>
 
-                <Link className="btn-dark py-2" to="/signin">
-                    Sign In
-                </Link>
+                
+                {
+                    access_token ?
+                    <div>
+                        <button>
+                            <img src={profile_img} />
+                        </button>
 
-                <Link className="btn-light py-2 hidden md:block" to="/signup">
-                    Sign Up
-                </Link>
+                        <UserNavigationPanel />
+                    
+                    </div>
 
+                    :
+                     <>
+                     <Link className="btn-dark py-2" to="/signin">Sign in</Link>
+                     <Link className="btn-light py-2 hidden md:block" to="/signup">Sign Up</Link>
+                     
+                     </>
+                }
 
             </div>
 

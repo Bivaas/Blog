@@ -39,5 +39,6 @@ const App = () => {
     )
 }
 
+export default App;
 
 export const UserContext = createContext({ });
