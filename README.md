@@ -24,6 +24,7 @@ bycriptjs
 jwt
 dotenv
 nodemon
+editor js
 
 # Use of AI 
 

@@ -1,10 +1,10 @@
 import Navbar from "./components/navbar.component";
 import { Routes, Route } from "react-router-dom";
-
 import UserAuthForm from "./pages/userAuthForm.page";
 
 import { createContext, useEffect, useState } from "react";
 import { lookInSession } from "./common/session";
+import Editor from "./pages/editor.pages";
 
 
 const App = () => { 
@@ -27,6 +27,7 @@ const App = () => {
         <UserContext.Provider value={{ userAuth, setUserAuth }}>
         <Routes>
             
+            <Route path="/editor" element={<Editor />} />
             <Route path="/" element={<Navbar />}>
             
             <Route path="signin" element={<UserAuthForm type="sign-in" />} />
