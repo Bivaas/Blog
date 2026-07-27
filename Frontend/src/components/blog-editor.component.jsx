@@ -25,6 +25,8 @@ const handleBannerUpload = (e) => {
 
                 toast.dismiss(loadingToast);
                 toast.success("uploaded !!!");
+
+                setBlog({ ...blog, banner: url });
             }
 
         })
@@ -57,7 +59,14 @@ const handleTitleChange = (e) => {
     setBlog({ ...blog, title: input.value });
 }
 
-let { blog, blog: { title }, setBlog } = useContext(EditorContext);
+// sets def banner 
+const handleError = (e) => {
+
+    let img = e.target;
+    img.src = defaultBanner;
+}
+
+let { blog, blog: { title, banner }, setBlog } = useContext(EditorContext);
 
 return (
 
@@ -89,7 +98,7 @@ return (
 
                 <label htmlFor="uploadBanner">
 
-                    <img src={defaultBanner} />
+                    <img src={banner} onError={handleError} />
 
                     <input 
 
