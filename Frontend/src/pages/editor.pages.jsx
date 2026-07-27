@@ -5,6 +5,19 @@ import { Navigate } from "react-router-dom";
 import BlogEditor from "../components/blog-editor.component";
 import PublishForm from "../components/publish-form.component"; 
 
+
+const blogStructure = {
+
+    title: '',
+    banner: '',
+    content: [],
+    tags: [],
+    des: '',
+    author: { personal_info: { }  }
+}
+
+export const EditorContext = createContext( { } );
+
 const Editor = () => { 
     
     const [ editorState, setEditorState ] = useState("editor");

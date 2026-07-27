@@ -34,6 +34,15 @@ const handleBannerUpload = (e) => {
 
 }
 
+// enter key block and title stays one line
+const handleTitleKeyDown = (e) => {
+
+    let input = e.target;
+
+    input.style.height = "auto";
+    input.style.height = input.scrollHeight = "px";
+}
+
 return (
 
     <>
@@ -78,6 +87,13 @@ return (
                 </label>
 
             </div>
+
+            <textarea placeholder="Blog Title"
+                      onKeyDown={handleTitleKeyDown}
+                      onChange={handleTitleChange} >
+
+                      </textarea>
+
         </div>
 
     </section>
