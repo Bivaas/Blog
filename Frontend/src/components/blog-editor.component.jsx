@@ -5,6 +5,9 @@ import defaultBanner from "../imgs/blog banner.png"
 import { Toaster, toast } from "react-hot-toast";
 import { uploadImage } from "../common/upload";
 
+import { useContext } from "react";
+import { EditorContext } from "../pages/editor.pages";
+
 
 const BlogEditor = () => { 
 
@@ -43,6 +46,19 @@ const handleTitleKeyDown = (e) => {
     input.style.height = input.scrollHeight = "px";
 }
 
+// just copies the current blog object and overwrites title
+const handleTitleChange = (e) => {
+
+    let input = e.target;
+
+    input.style.height = "auto";
+    input.style.height = input.scrollHeight + "px";
+
+    setBlog({ ...blog, title: input.value });
+}
+
+let { blog, blog: { title }, setBlog } = useContext(EditorContext);
+
 return (
 
     <>
@@ -55,7 +71,7 @@ return (
             <img src={logo} />
         </Link>
 
-        <p>New Blog</p>
+        <p>{ title.length ? title: "New Blog" }</p>
 
         <div>
 
