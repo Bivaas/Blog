@@ -2,18 +2,43 @@ import { Link } from "react-router-dom";
 import logo from "../imgs/logo.png";
 import defaultBanner from "../imgs/blog banner.png"
 
+import { Toaster, toast } from "react-hot-toast";
+import { uploadImage } from "../common/upload";
+
 
 const BlogEditor = () => { 
 
 const handleBannerUpload = (e) => {
 
-    let img = e.target.files[0];
-    console.log(img);
+    let img = e.target.file[0];
+
+    if(img) {
+
+        let loadingToast = toast.loading("uploading....");
+
+        uploadImage(img).then((url) => {
+
+            if (url) {
+
+                toast.dismiss(loadingToast);
+                toast.success("uploaded !!!");
+            }
+
+        })
+        .catch (err => {
+
+            toast.dismiss(loadingToast);
+            return toast.error(err);
+        })
+    }
+
 }
 
 return (
 
     <>
+
+    <Toaster />
     
     <nav>
 
