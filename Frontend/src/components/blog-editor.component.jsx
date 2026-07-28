@@ -10,6 +10,7 @@ import { EditorContext } from "../pages/editor.pages";
 
 import { useEffect } from "react";
 import EditorJs from "@editorjs/editorjs";
+import { tools } from "./tools.component";
 
 
 const BlogEditor = () => { 
@@ -79,6 +80,7 @@ useEffect(() => {
 
         holder: "textEditor",
         data: '',
+        tools: tools,
         placeholder: "Write a crazzy story ...."
     })
  
