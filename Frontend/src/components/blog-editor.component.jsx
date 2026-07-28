@@ -9,7 +9,7 @@ import { useContext } from "react";
 import { EditorContext } from "../pages/editor.pages";
 
 import { useEffect } from "react";
-import EditorJs from "@editorjs/editorjs";
+import EditorJS from "@editorjs/editorjs";
 import { tools } from "./tools.component";
 
 
@@ -17,7 +17,7 @@ const BlogEditor = () => {
 
 const handleBannerUpload = (e) => {
 
-    let img = e.target.file[0];
+    let img = e.target.files[0];
 
     if(img) {
 
@@ -46,10 +46,10 @@ const handleBannerUpload = (e) => {
 // enter key block and title stays one line
 const handleTitleKeyDown = (e) => {
 
-    let input = e.target;
+    if (e.keyCode == 13) {
 
-    input.style.height = "auto";
-    input.style.height = input.scrollHeight = "px";
+        e.preventDefault();
+    }
 }
 
 // just copies the current blog object and overwrites title

@@ -1,5 +1,5 @@
 import Embed from "@editorjs/embed";
-import List from "@editorjs/List";
+import List from "@editorjs/list";
 import Image from "@editorjs/image";
 import Header from "@editorjs/header";
 import Quote from "@editorjs/quote";

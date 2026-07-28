@@ -31,6 +31,7 @@ editor js
 error diagnosis 
 frontend validations
 proper implementation of Authentication and Authorization
+fix typos and error handling
 
 
 # Everything I've used: 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-export const upladImage = async (img) => {
+export const uploadImage = async (img) => {
 
     let imageUrl = null;
 
@@ -10,7 +10,7 @@ export const upladImage = async (img) => {
 
     await axios.post(
 
-        "https://api.imgbb.com/1/upload?key=" + import.meta.env.BITE_IMGBB_KEY,
+        "https://api.imgbb.com/1/upload?key=" + import.meta.env.VITE_IMGBB_KEY,
         formData
     )
 
@@ -24,6 +24,6 @@ export const upladImage = async (img) => {
         console.log(err);
     })
 
-    return imaeUrl;
+    return imageUrl;
     
 }
