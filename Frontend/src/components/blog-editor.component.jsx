@@ -8,6 +8,9 @@ import { uploadImage } from "../common/upload";
 import { useContext } from "react";
 import { EditorContext } from "../pages/editor.pages";
 
+import { useEffect } from "react";
+import EditorJs from "@editorjs/editorjs";
+
 
 const BlogEditor = () => { 
 
@@ -68,6 +71,20 @@ const handleError = (e) => {
 
 let { blog, blog: { title, banner }, setBlog } = useContext(EditorContext);
 
+
+// to point to id, starting empty data and runs once when the component
+useEffect(() => {
+
+    let editor = new EditorJS ({ 
+
+        holder: "textEditor",
+        data: '',
+        placeholder: "Write a crazzy story ...."
+    })
+ 
+}, [])
+
+
 return (
 
     <>
@@ -118,6 +135,9 @@ return (
                       onChange={handleTitleChange} >
 
                       </textarea>
+
+                      <hr />
+                      <div id="textEditor"></div>
 
         </div>
 
