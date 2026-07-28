@@ -6,6 +6,51 @@ import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 
+import { uploadImage } from "../common/upload";
+
+
+
+// upload img with url checker gate
+const uploadImageByURL = (e) => {
+
+    let link = new Promise((resolve, reject) => {
+
+        try {
+            // if its alr valid url
+            resolve(e);
+        }
+
+        catch(err) {
+
+            reject(err);
+        }
+    })
+
+    return link.then (url => {
+
+        return {
+
+            success: 1,
+            file: { url }
+        }
+    })
+}
+
+// uses imgbb to host uploaded img with url
+const uploadImageByFile = (e) => {
+
+    return uploadImage(e).then(url => {
+
+        if (url) {
+
+            return {
+
+                success: 1,
+                file: { url }
+            }
+        }
+    })
+}
 
 
 export const tools = {
@@ -15,6 +60,20 @@ export const tools = {
 
         class: List,
         inlineToolbar: true
+    },
+
+    image: {
+
+        class: Image,
+        config: {
+
+            // for img link and manual file from system
+            uploader: {
+
+                uploadByUrl: uploadImageByURL, 
+                uploadByFile: uploadImageByFile
+            }
+        }
     },
 
     header: {
