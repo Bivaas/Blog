@@ -33,6 +33,10 @@ frontend validations
 proper implementation of Authentication and Authorization
 fix typos and error handling
 
+# WHY?
+
+editor state in editor pages bcz when publishing, then isReady gets true and everything is lost 
+
 
 # Everything I've used: 
 

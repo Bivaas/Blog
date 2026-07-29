@@ -70,20 +70,59 @@ const handleError = (e) => {
     img.src = defaultBanner;
 }
 
-let { blog, blog: { title, banner }, setBlog } = useContext(EditorContext);
+// publish handler to check content length and if ready to publish
+const handlePublishEvent = () => { 
+
+    if(!banner.length) {
+
+        return toast.error("you need a banner compulsarily !");
+    }
+
+    if (!title.lenth) {
+
+        return toast.error("you must have a title to publish !");
+    }
+
+    if (textEditor.isReady) {
+
+        textEditor.save().then(data => {
+
+            if (data.blocks.length) {
+
+                setBlog({ ...blog, content: data });
+                setEditorState("publish");
+            }
+            else {
+
+                return toast.error("write something in content to publish !!");
+            }
+        })
+
+        .catch((err) => {
+
+            console.log(err);
+        })
+    }
+}
 
 
-// to point to id, starting empty data and runs once when the component
+let { blog, blog: { title, banner }, setBlog, textEditor, setEditorState } = useContext(EditorContext);
+
+
+
+// to point to id, starting empty data and runs once when the component && skips creation if editor already exists
 useEffect(() => {
 
-    let editor = new EditorJS ({ 
+    if(!textEditor.isReady) {
 
-        holder: "textEditor",
-        data: '',
-        tools: tools,
-        placeholder: "Write a crazzy story ...."
-    })
- 
+        setTextEditor(new EditorJS ({
+
+            holder: "textEditor",
+            data: '',
+            tools: tools,
+            placeholder: "write a crazy story..."
+        }))
+    }
 }, [])
 
 
@@ -103,7 +142,7 @@ return (
 
         <div>
 
-            <button>Publish</button>
+            <button onClick={handlePublishEvent}>Publish</button>
             <button>Save Draft</button>
         </div>
 

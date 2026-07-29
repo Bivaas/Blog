@@ -24,13 +24,15 @@ const Editor = () => {
     
     const [ blog, setBlog ] = useState(blogStructure);
 
+    const [ textEditor, setTextEditor ] = useState({ isReady: false});
+
     let { userAuth: { access_token } } = useContext(UserContext);
 
     return (
 
         access_token === null ? <Navigate to="/signin" />
         :
-         <EditorContext.Provider value={{ blog, setBlog }}>
+         <EditorContext.Provider value={{ blog, setBlog, textEditor, setTextEditor, editorState, setEditorState }}>
         
         {
 
