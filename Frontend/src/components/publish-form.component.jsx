@@ -7,12 +7,42 @@ import defaultBanner from "../imgs/blog banner.png";
 
 const PublishForm = () => {
 
-    let { blog, blog: { banner, title, tags, des }, setEditorState } = useContext(EditorContext);
+    let { blog, blog: { banner, title, tags, des }, setBlog, setEditorState } = useContext(EditorContext);
 
     const handleCloseEvent = () => {
 
         // back to writing view 
         setEditorState("editor");
+    }
+
+    // new title change
+    const handleBlogTitleChange = (e) => {
+
+        let input = e.target;
+        setBlog({ ...blog, title: input.value });
+    }
+
+    // disabled enter like in editor
+    const handleTitleKeyDown = (e) => {
+
+        // (enter code) 
+        if (e.keyCode == 13) { 
+
+            e.preventDefault();
+        }
+    }
+
+    // new description update
+    const handleBlogDesChange = (e) => {
+
+        let input = e.target;
+        setBlog({ ...blog, des: input.value });
+    }
+
+    // char limit (200)
+    const PublishForm = () => {
+
+        let characterLimit = 200;
     }
 
     return ( 
