@@ -66,9 +66,22 @@ const PublishForm = () => {
                     <img src={banner} />
                 </div>
 
-                <h1>{ title }</h1>
 
-                <p>{ des }</p>
+                <div>
+
+                    <p>Blog Title</p>
+
+                    <input type="text" placeholder="Title.." defaultValue={title} onChange={handleBlogTitleChange} />
+
+
+                    <p>write a short description about your blog</p>
+
+                    <textarea maxLength={characterLimit} defaultValue={des} placeholder="Short description about your blog" onChange={handleBlogDesChange} onKeyDown={handleTitleKeyDown}>
+                    </textarea>
+
+                    <p>{ characterLimit - des.length } characters left</p>
+
+                </div>
 
             </div>
 
