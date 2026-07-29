@@ -1,8 +1,50 @@
+import { useContext } from "react";
+import { Toaster, toast } from "react-hot-toast";
+import { EditorContext } from "../pages/editor.pages";
+import defaultBanner from "../imgs/blog banner.png";
+
+
+
 const PublishForm = () => {
+
+    let { blog, blog: { banner, title, tags, des }, setEditorState } = useContext(EditorContext);
+
+    const handleCloseEvent = () => {
+
+        // back to writing view 
+        setEditorState("editor");
+    }
 
     return ( 
 
-        <h1>publish form form component jsx file</h1>
+        <>
+        
+        <Toaster />
+
+        <section>
+
+
+            <button onClick={handleCloseEvent}>
+                <i className="fi fi-br-cross"></i>
+            </button>
+
+            <div>
+
+                <p>preview</p>
+
+                <div> 
+                    <img src={banner} />
+                </div>
+
+                <h1>{ title }</h1>
+
+                <p>{ des }</p>
+
+            </div>
+
+        </section>
+        
+        </>
     )
 }
 
