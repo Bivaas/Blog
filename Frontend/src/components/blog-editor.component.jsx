@@ -78,7 +78,7 @@ const handlePublishEvent = () => {
         return toast.error("you need a banner compulsarily !");
     }
 
-    if (!title.lenth) {
+    if (!title.length) {
 
         return toast.error("you must have a title to publish !");
     }
@@ -106,7 +106,7 @@ const handlePublishEvent = () => {
 }
 
 
-let { blog, blog: { title, banner }, setBlog, textEditor, setEditorState } = useContext(EditorContext);
+let { blog, blog: { title, banner }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
 
 
 

@@ -41,7 +41,7 @@ const handleTagEdit = (e) => {
 
         <div>
             
-            <p contentEditable="true" onKeyDown={handleTagEdit} onClick={addEdittable}>{ tag }</p>
+            <p contentEditable="true" onKeyDown={handleTagEdit} onClick={addEditable}>{ tag }</p>
 
             <button onClick={handleTagDelete}>
                 <i className="fi fi-br-cross"></i>

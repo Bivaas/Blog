@@ -10,6 +10,10 @@ const PublishForm = () => {
 
     let { blog, blog: { banner, title, tags, des }, setBlog, setEditorState } = useContext(EditorContext);
 
+    let characterLimit = 200;
+    let tagLimit = 10;
+
+
     const handleCloseEvent = () => {
 
         // back to writing view 
@@ -66,12 +70,7 @@ const PublishForm = () => {
         }
     }
 
-    // char limit (200) && tag limit
-    const PublishForm = () => {
-
-        let characterLimit = 200;
-        let tagLimit = 10;
-    }
+    
 
     return ( 
 
@@ -125,7 +124,7 @@ const PublishForm = () => {
 
                     <p>{ tagLimit - tags.length } Tags Left</p>
 
-                    <button onClick={publishBlog}>Publish</button>
+                    <button>Publish</button>
 
                 </div>
 
