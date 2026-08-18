@@ -30,6 +30,33 @@ mongoose.connect(process.env.DB_LOCATION, {
     autoIndex: true
 })
 
+
+// JWT verification server side
+const verifyJWT = (req, res, next) => {
+
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (token == null) {
+
+        return res.status(401).json({ "error": "No access token "});
+    }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+
+        if (err) {
+
+            return res.status(403).json({ "error": "Access token is invalid" });
+        }
+
+        req.user = user.id;
+        next();
+
+    })
+}
+
+
+
 // usr mongo id encryption with jwt
 const formatDatatoSend = (user) => {
 
@@ -191,6 +218,14 @@ server.post("/signup", (req, res) => {
 
             return res.status(500).json({ "error": "Failed google authentication, try again !!"})
         })
+    })
+
+
+
+    // new blog create route (with temp res)
+    server.post("/create-blog", verifyJWT, (req, res) => {
+
+        res.json(req.body);
     })
 
 
