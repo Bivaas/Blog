@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 import bycript from 'bycryptjs';
 import User from './Schema/User.js';
+import Blog from './Schema/Blog.js';
 
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
