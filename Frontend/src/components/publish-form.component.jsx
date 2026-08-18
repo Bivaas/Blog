@@ -3,6 +3,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { EditorContext } from "../pages/editor.pages";
 import defaultBanner from "../imgs/blog banner.png";
 
+import Tag from "./tags.component";
 
 
 const PublishForm = () => {
@@ -39,10 +40,37 @@ const PublishForm = () => {
         setBlog({ ...blog, des: input.value });
     }
 
-    // char limit (200)
+
+    //tag input handler and validation to not let key to input
+    const handleKeyDown = (e) => {
+
+        if(e.keyCode == 13 || e.keyCode == 188){
+
+            e.preventDefault();
+
+            let tag = e.target.value 
+
+            if(tags.length < tagLimit) {
+
+                if(!tags.includes(tag) && tag.length) {
+
+                    setBlog({ ...blog, tags: [ ...tags, tag ] });
+                }
+
+            } else {
+
+                toast.error(`You can add only max ${tagLimit} tags`);
+            }
+
+            e.target.value = "";
+        }
+    }
+
+    // char limit (200) && tag limit
     const PublishForm = () => {
 
         let characterLimit = 200;
+        let tagLimit = 10;
     }
 
     return ( 
