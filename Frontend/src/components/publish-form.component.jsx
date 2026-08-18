@@ -117,11 +117,15 @@ const PublishForm = () => {
                         {
                             tags.map((tag, i) => {
 
-                                return <Tag tag={tag} key={i} />
+                                return <Tag tag={tag} tagIndex={i} key={i} />
                             })
                         }
 
                     </div>
+
+                    <p>{ tagLimit - tags.length } Tags Left</p>
+
+                    <button onClick={publishBlog}>Publish</button>
 
                 </div>
 

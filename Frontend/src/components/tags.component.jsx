@@ -14,15 +14,39 @@ const handleTagDelete = () => {
 
 }
 
+
+const addEditable = (e) => {
+
+    e.target.setAttribute("contentEditable", true);
+    e.target.focus();
+}
+
+const handleTagEdit = (e) => {
+
+    if (e.keyCode == 13 || e.keyCode == 188) {
+
+        e.preventDefault();
+
+        let currentTag = e.target.innerText;
+        tags[tagIndex] = currentTag;
+
+        setBlog ({ ...blog, tags });
+
+        e.target.setAttribute("contentEditable", false);
+
+    }
+}
+
     return ( 
 
         <div>
-            <p>{ tag }</p>
+            
+            <p contentEditable="true" onKeyDown={handleTagEdit} onClick={addEdittable}>{ tag }</p>
 
             <button onClick={handleTagDelete}>
                 <i className="fi fi-br-cross"></i>
             </button>
-            
+
         </div>
     )
 }
