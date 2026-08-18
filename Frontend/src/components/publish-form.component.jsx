@@ -109,6 +109,20 @@ const PublishForm = () => {
 
                     <p>{ characterLimit - des.length } characters left</p>
 
+                    {/* tag input field setup */}
+                    <div>
+
+                        <input type="text" placeholder="Topics" onKeyDown={handleKeyDown} />
+
+                        {
+                            tags.map((tag, i) => {
+
+                                return <Tag tag={tag} key={i} />
+                            })
+                        }
+
+                    </div>
+
                 </div>
 
             </div>
