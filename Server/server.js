@@ -225,7 +225,42 @@ server.post("/signup", (req, res) => {
     // new blog create route (with temp res)
     server.post("/create-blog", verifyJWT, (req, res) => {
 
-        res.json(req.body);
+        let authorID = req.user;
+
+        let { title, des, banner, tags, content } = req.body;
+
+        // validation for all input components
+        if (!title.length) {
+
+            return res.status(403).json({ "error": "You must have a title !!"})
+        }
+
+        if (!des.length || des.length > 200) {
+
+            return res.status(403).json({ "error": "Your blog description should be under 200 words !!"})
+        }
+
+        if (!banner.length) {
+
+            return res.status(403).json({ "error": "You must have a banner to publish !!"})
+        }
+
+        if (!content.blocks.length) {
+
+            return res.status(403).json({ "error": "You should have some content in blog itself !!"})
+        }
+
+        if (!tags.length || tags.length > 10) {
+
+            return res.status(403).json({ "error": "You must provide tags, maximum being 10"})
+        }
+
+        // tags into lowercase converter
+        tags = tags.map(tag => tag.toLowerCase());
+
+        let blog_id = title.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\s+/g, -).trim() + nanoid();
+    
+    
     })
 
 
