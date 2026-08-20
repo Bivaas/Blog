@@ -258,11 +258,45 @@ server.post("/signup", (req, res) => {
         // tags into lowercase converter
         tags = tags.map(tag => tag.toLowerCase());
 
-        let blog_id = title.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\s+/g, -).trim() + nanoid();
+        let blog_id = title.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\s+/g, '-').trim() + nanoid();
     
     
-    })
+        let blog = new Blog ({
+            title,
+            des,
+            banner,
+            content,
+            tags,
+            author: authorId,
+            blog_id
+        })
 
+        blog.save().then(blog => {
+
+            let incrementVal = 1;
+
+            User.findOneAndUpdate(
+
+                { _id: authorId },
+                { $inc : { "account_info.total_posts" : incrementVal }, $push : { "blogs" : blog_id }}
+            )
+
+            .then(user => {
+
+                return res.status(200).json({ if: blog.blog_id })
+            })
+
+            .catch(err => {
+
+                return res.status(500).json({ "error": "failed to update total posts number" })
+            })
+        })
+
+        .catch (err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
 
 
     // password hash
