@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
-import bycript from 'bycryptjs';
+import bcrypt from 'bcryptjs';
 import User from './Schema/User.js';
 import Blog from './Schema/Blog.js';
 
@@ -73,7 +73,7 @@ const formatDatatoSend = (user) => {
 
 const generateUsername = async (email) => {
 
-    let username = await generateUsername(email);
+    let username = email.split("@")[0];
 
     let isUsernameNotUnique = await User.exists({ "personal_info.username": username}).then((result) => result)
 
@@ -104,6 +104,35 @@ server.post("/signup", (req, res) => {
     if(!passwordRegex.test(password)){
         return res.status(403).json({ "error": "password should be 6-20 characters with lowercase and uppercase and number" })
     }
+
+    // password hash
+    bcrypt.hash(password, 10, async (err, hashed_password) => {
+
+        let username = email.split("@")[0];
+
+        let user = new User({
+            personal_info: { fullname, email, password: hashed_password, username}
+        })
+
+        user.save().then((u) => {
+
+            return res.status(200).json(formatDatatoSend(u))
+        })
+
+    
+        .catch(err => { 
+
+            // doing email validation because same req is sent twice
+            if(err.code ==11000) {
+                return res.status(500).json({ "error": "your email already exists !!"})
+            }
+
+            return res.status(500).json({ "error": err.message })
+
+        })
+    })
+
+})
 
 
     // usr sign in route 
@@ -187,28 +216,8 @@ server.post("/signup", (req, res) => {
                     return res.status(403).json({ "error": "Google account exists, try signing in with google "})
                 }
     
-            // new acc signup
-            } else { 
-
-                let username = await generateUsername(email);
-
-                user = new User({ 
-
-                    personal_info: { fullname: name, email, username },
-                    google_auth: true
-
-                })
-
-                await user.save().then((u) => {
-
-                    user = u;
-                })
-
-                .catch(err => {
-
-                    return res.status(500).json({ "error": err.message })
-                })
-            }
+            
+            } 
 
             return res.status(200).json(formatDatatoSend(user))
 
@@ -225,7 +234,7 @@ server.post("/signup", (req, res) => {
     // new blog create route (with temp res)
     server.post("/create-blog", verifyJWT, (req, res) => {
 
-        let authorID = req.user;
+        let authorId = req.user;
 
         let { title, des, banner, tags, content } = req.body;
 
@@ -278,12 +287,12 @@ server.post("/signup", (req, res) => {
             User.findOneAndUpdate(
 
                 { _id: authorId },
-                { $inc : { "account_info.total_posts" : incrementVal }, $push : { "blogs" : blog_id }}
+                { $inc : { "account_info.total_posts" : incrementVal }, $push : { "blogs" : blog._id }}
             )
 
             .then(user => {
 
-                return res.status(200).json({ if: blog.blog_id })
+                return res.status(200).json({ id: blog.blog_id })
             })
 
             .catch(err => {
@@ -299,35 +308,6 @@ server.post("/signup", (req, res) => {
     })
 
 
-    // password hash
-    bcrypt.hash(password, 10, async (err, hashed_password) => {
-
-        let username = email.split("@")[0];
-
-        let user = new User({
-            personal_info: { fullname, email, password: hashed_password, username}
-        })
-
-        user.save().then((u) => {
-
-            return res.status(200).json(formatDatatoSend(u))
-        })
-
-    
-        .catch(err => { 
-
-            // doing email validation because same req is sent twice
-            if(err.code ==11000) {
-                return res.status(500).json({ "error": "your email already exists !!"})
-            }
-
-            return res.status(500).json({ "error": err.message })
-
-        })
-    })
-
-
-})
 
 
 server.listen(PORT, () => { 
