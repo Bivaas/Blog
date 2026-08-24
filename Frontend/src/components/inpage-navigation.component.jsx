@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 
-const InPageNavigation = () => {
+const InPageNavigation = ({ routes, defaultActiveIndex = 0 }) => {
+
+    let activeTabLineRef = useRef();
+    let activeTabRef = useRef();
 
     const [ inPageNavigation, setInPageNavIndex ] = useState(0);
+
+    const changePageState = (btn, i) => {
+
+        let { offsetWidth, offsetLeft } = btn;
+
+        activeTabLineRef.current.style.width = offsetWidth + "px";
+        activeTabLineRef.current.style.left = offsetLeft + "px";
+
+        setInPageNavIndex(i);
+    }
+
+    useEffect(() => {
+
+        changePageState(activeTabRef.current, defaultActiveIndex);
+    }, [])
+
 
     return (
 
@@ -15,8 +34,10 @@ const InPageNavigation = () => {
                     return (
 
                         <button 
+                            ref = {i == defaultActiveIndex ? activeTabRef : null}
                             key={i}
-                            className={"p-4 px-5 capitalize" + (inPageNavIndex == i ? "text-black" : "text-dark-grey")}>
+                            className={"p-4 px-5 capitalize" + (inPageNavIndex == i ? "text-black" : "text-dark-grey")}
+                            onClick={(e) => changePageState(e.target, i)}>
 
                                 { route }
                             </button>
