@@ -16,6 +16,8 @@ import { getAuth } from 'firebase-admin/auth';
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
+let maxLimit = 5;
+
 const server = express();
 let PORT = 3000;
 
@@ -229,7 +231,25 @@ server.post("/signup", (req, res) => {
         })
     })
 
+    // get route to render blogs without auth 
+    server.get('/latest-blogs', (req, res) => {
 
+        Blog.find({ draft: false })
+
+        .populate("author", "personal_info.profile_img personal_info.username personal_info.fullname -_id")
+        .sort({ "publishedAt": -1 })
+        .select("blog_id title des banner activity tags publishedAt -_id")
+        .limit(maxLimit)
+        .then(blogs => {
+
+            return res.status(200).json({ blogs })
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
 
     // new blog create route (with temp res)
     server.post("/create-blog", verifyJWT, (req, res) => {

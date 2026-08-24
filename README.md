@@ -1,6 +1,7 @@
 # Blog site
 
-A site made personally for me to write blogs in near-future
+A site made personally for me to write blogs in near-future.
+This site is greatly inspired my medium.
 
 
 # Tech-stack
@@ -32,6 +33,10 @@ error diagnosis
 frontend validations
 proper implementation of Authentication and Authorization
 fix typos and error handling
+
+# What I learned ?
+
+From the idea of having a simple blog site to medium inspired platform, I have to think a lot. My previous projects were simple, they had few routes, few dependencies and few components but this project truly confused me and turned out to be bigger project than I anticipated. 
 
 # WHY?
 
