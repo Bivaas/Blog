@@ -2,6 +2,8 @@ import InPageNavigation from "../components/inpage-navigation.component";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+import Loader from "../components/loader.component";
+
 const HomePage = () => {
 
     const [ blogs, setBlogs ] = useState(null);
@@ -9,15 +11,22 @@ const HomePage = () => {
     const fetchLatestBlogs = () => {
 
         axios.geet(import.meta.env.VITE_DOMAIN + "/latest-blogs")
-        .then (( { blogs }) => {
+        .then (( { data }) => {
 
-            console.log(blogs);
+            console.log(data.blogs);
         }) 
         .catch (err => {
 
             console.log(err);
         })
     }
+
+
+    useEffect(() => {
+
+        fetchLatestBlogs();
+    }, [])
+
 
     return (
 
@@ -28,7 +37,17 @@ const HomePage = () => {
 
                 <InPageNavigation routes={["home", "trending blogs"]} defaultHidden={["trending blogs"]}>
 
-                    <h1> Latest Blogs here</h1>
+                    {
+                        blogs == null ? (
+                            <loader />
+                        ) : (
+
+                            blogs.map((blog, i) => {
+
+                                return <h1 key={i}>{ blog.title }</h1>
+                            })
+                        )
+                    }
 
                     <h1> Trending Blogs here</h1>
 
