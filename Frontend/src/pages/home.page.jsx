@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 import Loader from "../components/loader.component";
+import BlogPostCard from "../components/blog-post.component";
 
 const HomePage = () => {
 
@@ -46,7 +47,7 @@ const HomePage = () => {
 
                             blogs.map((blog, i) => {
 
-                                return <h1 key={i}>{ blog.title }</h1>
+                               return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
                             })
                         )
                     }
