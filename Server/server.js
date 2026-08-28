@@ -251,6 +251,24 @@ server.post("/signup", (req, res) => {
         })
     })
 
+    //  URL parameter and query update and readcount
+    server.get('/get-blog/:blog_id', (req, res) => {
+
+        let { blog_id } = req.params;
+
+        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": 1}})
+        .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
+        .select("title des content banner activity publishedAt blog_id tags")
+        .then(blog => {
+
+            return res.status(200).json({ blog })
+        })
+        .catch (err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+
     // new blog create route (with temp res)
     server.post("/create-blog", verifyJWT, (req, res) => {
 
