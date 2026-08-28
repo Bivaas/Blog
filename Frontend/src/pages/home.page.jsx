@@ -37,6 +37,8 @@ const HomePage = () => {
 
                 <InPageNavigation routes={["home", "trending blogs"]} defaultHidden={["trending blogs"]}>
 
+
+                    {/* Latest blogs */}
                     {
                         blogs == null ? (
                             <loader />
