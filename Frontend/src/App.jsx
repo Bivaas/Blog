@@ -6,6 +6,7 @@ import { createContext, useEffect, useState } from "react";
 import { lookInSession } from "./common/session";
 import Editor from "./pages/editor.pages";
 import HomePage from "./pages/home.page";
+import BlogPage from "./pages/blog.page";
 
 
 const App = () => { 
@@ -29,6 +30,7 @@ const App = () => {
         <Routes>
             
             <Route path="/editor" element={<Editor />} />
+            <Route path="/blog/:blog_id" element={<BlogPage />} />
             <Route path="/" element={<Navbar />}>
 
                 <Route index element={<HomePage />} />
