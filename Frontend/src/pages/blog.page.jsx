@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+
 import { getDay } from "../common/date";
 import Loader from "../components/loader.component";
+import BlogContent from "../components/blog-content.component";
 
 
 // fetch and header for blog page
@@ -57,6 +59,17 @@ const BlogPage = () => {
 
                 </div>
 
+            </div>
+
+            <div className="my-12 font-gelasio blog-page-content">
+                {
+                    blog.content[0].blocks.map((block, i) => {
+
+                        return <div key={i} className="my-4 md:my-8">
+                            <BlogContent block={block} />
+                            </div>
+                    })
+                }
             </div>
 
         </div>
