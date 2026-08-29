@@ -6,7 +6,7 @@ const InPageNavigation = ({ routes, defaultHidden = [], defaultActiveIndex = 0, 
     let activeTabLineRef = useRef();
     let activeTabRef = useRef();
 
-    const [ inPageNavigation, setInPageNavIndex ] = useState(0);
+    const [ inPageNavIndex, setInPageNavIndex ] = useState(defaultActiveIndex);
 
     const changePageState = (btn, i) => {
 
@@ -37,7 +37,7 @@ const InPageNavigation = ({ routes, defaultHidden = [], defaultActiveIndex = 0, 
                         <button 
                             ref = {i == defaultActiveIndex ? activeTabRef : null}
                             key={i}
-                            className={"p-4 px-5 capitalize" + (inPageNavIndex == i ? "text-black" : "text-dark-grey") + (defaultHidden.includes(route) ? " md:hidden" : "")}
+                            className={"p-4 px-5 capitalize " + (inPageNavIndex == i ? "text-black" : "text-dark-grey") + (defaultHidden.includes(route) ? " md:hidden" : "")}
                             onClick={(e) => changePageState(e.target, i)}>
 
                                 { route }
