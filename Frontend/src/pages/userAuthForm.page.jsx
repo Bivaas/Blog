@@ -84,17 +84,17 @@ const UserAuthForm = ({ type }) => {
 
         if(!email.length) {
 
-            return console.log("enter email");
+            return toast.error("enter your email");
         }
 
         if (!emailRegex.test(email)) {
 
-            return console.log("invalid email ");
+            return toast.error("invalid email");
         }
 
         if (!passwordRegex.test(password)) {
 
-            return console.log("invalid password format..use 6-20 chars, lowercase, uppercase and numbers");
+            return toast.error("password should be 6-20 characters with a lowercase, an uppercase and a number");
         }
 
         userAuthThroughServer(serverRoute, formData);
@@ -125,7 +125,7 @@ const UserAuthForm = ({ type }) => {
                         name="fullname"
                         type="text"
                         placeholder="Your Full Name.."
-                        icon="fi-rr-usr"
+                        icon="fi-rr-user"
                         />
                         : ""
                   }

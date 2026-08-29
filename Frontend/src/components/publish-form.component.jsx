@@ -133,12 +133,14 @@ const PublishForm = () => {
 
         })
 
-        .catch(( { response } ) => {
+        .catch((err) => {
 
             e.target.classList.remove("disable");
 
             toast.dismiss(loadingToast);
-            return toast.error(response.data.error);
+
+            let msg = err.response ? err.response.data.error : "Server unreachable, is the backend running ?";
+            return toast.error(msg);
 
         })
     }

@@ -31,7 +31,7 @@ const Navbar = () => {
 
             <Link to="/" className="flex-none w-10">
             
-                <img src="/favicon.svg" className="w-full" alt="Logo" />
+                <img src="favicon.svg" className="w-full" alt="Logo" />
 
             </Link>
 

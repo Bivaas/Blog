@@ -31,7 +31,15 @@ const List = ({ style, items }) => {
             {
                 items.map((listItem, i) => {
 
-                    return <li key={i} className="my-4" dangerouslySetInnerHTML={{ __html: listItem }}></li>
+                    let text = typeof listItem == "string" ? listItem : listItem.content;
+                    let nested = typeof listItem == "string" ? [] : (listItem.items || []);
+
+                    return <li key={i} className="my-4">
+
+                        <span dangerouslySetInnerHTML={{ __html: text }}></span>
+                        { nested.length ? <List style={style} items={nested} /> : "" }
+
+                    </li>
                 })
             }
 

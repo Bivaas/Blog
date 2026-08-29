@@ -13,28 +13,40 @@ const BlogPage = () => {
     let { blog_id } = useParams();
 
     const [ blog, setBlog ] = useState(null);
+    const [ notFound, setNotFound ] = useState(false);
 
     const fetchBlog = () => {
 
         axios.get(import.meta.env.VITE_DOMAIN + "/get-blog/" + blog_id)
         .then ( ( { data: { blog } }) => {
 
+            if (!blog) {
+
+                return setNotFound(true);
+            }
+
             setBlog(blog);
         })
         .catch (err => {
 
             console.log(err);
+            setNotFound(true);
         })
     }
 
     useEffect(() => {
 
+        setBlog(null);
+        setNotFound(false);
+
         fetchBlog();
-    }, [])
+    }, [blog_id])
 
 
     return (
 
+        notFound ? <h1 className="max-w-[900px] mx-auto py-10 px-[5vw] text-2xl">Blog not found</h1>
+        :
         blog == null ? <Loader />
         :
         <div className="max-w-[900px] mx-auto py-10 px-[5vw]">
@@ -63,7 +75,7 @@ const BlogPage = () => {
 
             <div className="my-12 font-gelasio blog-page-content">
                 {
-                    blog.content[0].blocks.map((block, i) => {
+                    (blog.content?.[0]?.blocks ?? []).map((block, i) => {
 
                         return <div key={i} className="my-4 md:my-8">
                             <BlogContent block={block} />

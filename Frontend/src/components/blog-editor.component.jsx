@@ -118,7 +118,7 @@ useEffect(() => {
         setTextEditor(new EditorJS ({
 
             holder: "textEditor",
-            data: '',
+            data: { blocks: [] },
             tools: tools,
             placeholder: "write a crazy story..."
         }))
