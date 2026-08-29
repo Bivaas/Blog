@@ -75,7 +75,7 @@ const formatDatatoSend = (user) => {
 
 const generateUsername = async (email) => {
 
-    let username = email.split("@")[0];
+    let username = await generateUsername(email);
 
     let isUsernameNotUnique = await User.exists({ "personal_info.username": username}).then((result) => result)
 
@@ -213,13 +213,25 @@ server.post("/signup", (req, res) => {
                     return res.status(403).json ({ "error": "log in with your password to access this account" })
                 }
 
-                else { 
+            } else {
 
-                    return res.status(403).json({ "error": "Google account exists, try signing in with google "})
-                }
-    
-            
-            } 
+                let username = await generateUsername(email);
+
+                user = new user ({ 
+                    personal_info: { fullname: name, email, username },
+                    google_auth: true
+                })
+
+                await user.save().then((u) => {
+
+                    user = u;
+                })
+
+                .catch(err => {
+
+                    return res.status(500).json({ "error": err.message })
+                })
+            }
 
             return res.status(200).json(formatDatatoSend(user))
 

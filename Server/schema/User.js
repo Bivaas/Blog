@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 let profile_imgs_name_list = ["John", "David", "Annie", "Cleo", "Bob", "Leo", "Angel", "Jack" ];
 let profile_imgs_collections_list = ["notionists-neutral", "adventurer-neutral", "fun-emoji"];
 
-const userSchema = mongoose.schema({
+const userSchema = mongoose.Schema({
 
     personal_info: {
         fullname: {
@@ -36,7 +36,7 @@ const userSchema = mongoose.schema({
 
         profile_img: {
             type: String,
-            dafault: () => {
+            default: () => {
                 return `https://api.dicebar.com/6.x/${profile_imgs_collections_list[Math.floor(Math.random() * profile_imgs_collections_list.length)]}/svg?seed=${profile_imgs_name_list}[Math.floor(Math.random() * profile_imgs_name_list.length)]}`
             }
         },
