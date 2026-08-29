@@ -3,13 +3,13 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
-import User from './Schema/User.js';
-import Blog from './Schema/Blog.js';
+import User from './schema/User.js';
+import Blog from './schema/Blog.js';
 
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
-import admin from 'firebase-admin';
+import { initializeApp, cert } from 'firebase-admin/app';
 import serviceAccountKey from './blog-firebase-adminsdk.json' with { type: "json" };
 import { getAuth } from 'firebase-admin/auth';
 
@@ -24,8 +24,8 @@ let PORT = 3000;
 server.use(express.json());
 server.use(cors());
 
-admin.initializeApp ({ 
-    credential: admin.credential.cert(serviceAccountKey)
+initializeApp ({ 
+    credential: cert(serviceAccountKey)
 })
 
 mongoose.connect(process.env.DB_LOCATION, {
@@ -75,7 +75,7 @@ const formatDatatoSend = (user) => {
 
 const generateUsername = async (email) => {
 
-    let username = await generateUsername(email);
+    let username = email.split("@")[0];
 
     let isUsernameNotUnique = await User.exists({ "personal_info.username": username}).then((result) => result)
 
@@ -110,7 +110,7 @@ server.post("/signup", (req, res) => {
     // password hash
     bcrypt.hash(password, 10, async (err, hashed_password) => {
 
-        let username = email.split("@")[0];
+        let username = await generateUsername(email);
 
         let user = new User({
             personal_info: { fullname, email, password: hashed_password, username}
@@ -125,7 +125,14 @@ server.post("/signup", (req, res) => {
         .catch(err => { 
 
             // doing email validation because same req is sent twice
-            if(err.code ==11000) {
+            if(err.code == 11000) {
+
+                let field = Object.keys(err.keyPattern || {})[0] || "";
+
+                if (field.includes("username")) {
+                    return res.status(500).json({ "error": "that username is already taken !!"})
+                }
+
                 return res.status(500).json({ "error": "your email already exists !!"})
             }
 
@@ -189,7 +196,7 @@ server.post("/signup", (req, res) => {
             let { email, name, picture } = decodedUser;
 
             // asking google for bigger img
-            picture = picture.replace("s96-c", "s384-c");
+            picture = picture ? picture.replace("s96-c", "s384-c") : "";
             
             
             let user = await User.findOne({ "personal_info.email": email })
@@ -217,20 +224,20 @@ server.post("/signup", (req, res) => {
 
                 let username = await generateUsername(email);
 
-                user = new user ({ 
+                user = new User ({
                     personal_info: { fullname: name, email, username },
                     google_auth: true
                 })
 
-                await user.save().then((u) => {
+                try {
 
-                    user = u;
-                })
+                    user = await user.save();
+                }
 
-                .catch(err => {
+                catch (err) {
 
                     return res.status(500).json({ "error": err.message })
-                })
+                }
             }
 
             return res.status(200).json(formatDatatoSend(user))
@@ -268,10 +275,15 @@ server.post("/signup", (req, res) => {
 
         let { blog_id } = req.params;
 
-        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": 1}})
+        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": 1}}, { new: true })
         .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
         .select("title des content banner activity publishedAt blog_id tags")
         .then(blog => {
+
+            if (!blog) {
+
+                return res.status(404).json({ "error": "No blog found with that id" })
+            }
 
             return res.status(200).json({ blog })
         })
