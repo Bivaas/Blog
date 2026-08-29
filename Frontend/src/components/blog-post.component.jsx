@@ -23,13 +23,13 @@ const BlogPostCard = ({ content, author }) => {
 
             <h1 className="blog-title">{ title }</h1>
 
-            <p className="my-3 text-xl font-gelasio loading-7 max-sm:hidden line-clamp-2">{ des }</p>
+            <p className="my-3 text-xl font-gelasio leading-7 max-sm:hidden line-clamp-2">{ des }</p>
 
             <div className="flex gap-4 mt-7">
 
                 <span className="btn-light py-1 px-4">{ tags[0] }</span>
                 <span className="flex items-center gap-2 text-dark-grey">
-                    <i className="fi fi-rr heart text-xl"></i>
+                    <i className="fi fi-rr-heart text-xl"></i>
                     { total_likes }
                 </span>
 

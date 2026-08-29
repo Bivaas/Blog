@@ -37,7 +37,7 @@ const BlogPage = () => {
 
         blog == null ? <Loader />
         :
-        <div className="max-w-[-900px] mx-auto py-10 px-[5vw]">
+        <div className="max-w-[900px] mx-auto py-10 px-[5vw]">
 
             <img src={blog.banner} className="aspect-video w-full" />
 

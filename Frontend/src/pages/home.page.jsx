@@ -11,10 +11,10 @@ const HomePage = () => {
 
     const fetchLatestBlogs = () => {
 
-        axios.geet(import.meta.env.VITE_DOMAIN + "/latest-blogs")
+        axios.get(import.meta.env.VITE_DOMAIN + "/latest-blogs")
         .then (( { data }) => {
 
-            console.log(data.blogs);
+            setBlogs(data.blogs);
         }) 
         .catch (err => {
 
@@ -42,7 +42,7 @@ const HomePage = () => {
                     {/* Latest blogs */}
                     {
                         blogs == null ? (
-                            <loader />
+                            <Loader />
                         ) : (
 
                             blogs.map((blog, i) => {
