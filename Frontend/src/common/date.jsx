@@ -7,5 +7,5 @@ export const getDay = (timestamp) => {
 
     let date = new Date(timestamp);
 
-    return `${date.detDate()} ${months[date.getMonth()]}`;
+    return `${date.getDate()} ${months[date.getMonth()]}`;
 }

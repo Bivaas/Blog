@@ -28,9 +28,10 @@ const UserAuthForm = ({ type }) => {
             setUserAuth(data);
         })
 
-        .catch(({ response }) => {
+        .catch((err) => {
 
-            toast.error(response.data.error);
+            let msg = err.response ? err.response.data.error : "Server unreachable, is the backend running ?";
+            toast.error(msg);
         })
     }
 
