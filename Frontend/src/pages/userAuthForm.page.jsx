@@ -110,7 +110,7 @@ const UserAuthForm = ({ type }) => {
         access_token ? 
         <Navigate to="/" /> :
         
-        <section className="h-cover flex items-center justify-center">
+        <section className="h-cover flex flex-col items-center justify-center">
             <Toaster />
             <form id="formElement" className="w-[80%] max-w-[400px]">
 
@@ -125,7 +125,7 @@ const UserAuthForm = ({ type }) => {
                         name="fullname"
                         type="text"
                         placeholder="Your Full Name.."
-                        icon="fi-rr-usr"
+                        icon="fi-rr-user"
                         />
                         : ""
                   }

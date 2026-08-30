@@ -3,6 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 
 import { UserContext } from "../App";
 import UserNavigationPanel from "./user-navigation.component";
+import logo from "../imgs/bloglogo.png";
 
 const Navbar = () => { 
 
@@ -31,7 +32,7 @@ const Navbar = () => {
 
             <Link to="/" className="flex-none w-10">
             
-                <img src="favicon.svg" className="w-full" alt="Logo" />
+                <img src={logo} className="w-full" alt="Logo" />
 
             </Link>
 
