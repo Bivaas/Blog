@@ -125,7 +125,7 @@ const UserAuthForm = ({ type }) => {
                         name="fullname"
                         type="text"
                         placeholder="Your Full Name.."
-                        icon="fi-rr-user"
+                        icon="fi-rr-usr"
                         />
                         : ""
                   }
@@ -155,11 +155,11 @@ const UserAuthForm = ({ type }) => {
 
                         <hr className="w-1/2 border-black" />
                         <p>or</p>
-                        <hr className="1-1/2 border-black" />
+                        <hr className="w-1/2 border-black" />
                     </div>
 
 
-                    <button className="btn-dark flex items-center justify gap-4 w-[90%] center" type="button" onClick={handleGoogleAuth}>
+                    <button className="btn-dark flex items-center justify-center gap-4 w-[90%] center" type="button" onClick={handleGoogleAuth}>
 
                     <img src={googleIcon} className="w-5" />
                         Login with Google..
