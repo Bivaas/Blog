@@ -121,3 +121,16 @@ html {
 .tag {
     @apply p-3 bg-grey rounded-full px-6 capitalize;
 }
+
+
+#textEditor {
+
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#textEditor .ce-block__content, 
+#textEditor .ce-toolbar__content{
+
+    max-width: 900px;
+}

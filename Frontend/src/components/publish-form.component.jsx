@@ -153,40 +153,54 @@ const PublishForm = () => {
         
         <Toaster />
 
-        <section>
+        <section className="w-screen min-h-screen grid items-center lg:grid-cols py-16 lg:gap-4">
 
 
-            <button onClick={handleCloseEvent}>
+            <button className="w-12 h-12 absolute right-[5vw] z-10 top-[5%] lg:top-[10%]" onClick={handleCloseEvent}>
                 <i className="fi fi-br-cross"></i>
             </button>
 
-            <div>
+            {/* blog preview section */}
 
-                <p>preview</p>
+            <div className="max-w-[550px] center">
 
-                <div> 
+                <p className="text-dark-grey mb-1">preview</p>
+
+                <div className="w-full aspect-video rounded-lg overflow-hidden bg-grey mt-4"> 
                     <img src={banner} />
                 </div>
 
 
-                <div>
+                <h1 className="text-4xl font-medium mt-2 leading-tight line-clamp-2">{ title }</h1>
 
-                    <p>Blog Title</p>
-
-                    <input type="text" placeholder="Title.." defaultValue={title} onChange={handleBlogTitleChange} />
+                <p className="font-gelasio line-clamp-2 text-xl leading-7 mt-4">{ des }</p>
 
 
-                    <p>write a short description about your blog</p>
+                </div>
 
-                    <textarea maxLength={characterLimit} defaultValue={des} placeholder="Short description about your blog" onChange={handleBlogDesChange} onKeyDown={handleTitleKeyDown}>
+                {/* form section */}
+
+                <div className="border-grey lg:border-1 lg:pl-8">
+
+                    <p className="text-dark-grey mb-2 mt-9">Blog Title</p>
+
+                    <input type="text" placeholder="Title.." defaultValue={title} className="input-box pl-4" onChange={handleBlogTitleChange} />
+
+
+                    <p className="text-dark-grey mb-2 mt-9">write a short description about your blog</p>
+
+                    <textarea maxLength={characterLimit} defaultValue={des} placeholder="Short description about your blog" className="h-40 resize-none leading-7 imput-box pl-4" onChange={handleBlogDesChange} onKeyDown={handleTitleKeyDown}>
                     </textarea>
 
-                    <p>{ characterLimit - des.length } characters left</p>
+                    <p className="mt-1 tet-dark-grey text-sm text-right">{ characterLimit - des.length } characters left</p>
+
+                    <p className="text-dark-grey mb-2 mt-9">Topics (for searching and ranking)</p>
 
                     {/* tag input field setup */}
-                    <div>
+                    <div className="relative input-box pl-2 py-2 pb-4">
 
-                        <input type="text" placeholder="Topics" onKeyDown={handleKeyDown} />
+                        <input type="text" placeholder="Topics" 
+                        className="sticky input-box bg-white top-0 left-0 pl-4 mb-3 focus:bg-white" onKeyDown={handleKeyDown} />
 
                         {
                             tags.map((tag, i) => {
@@ -197,13 +211,11 @@ const PublishForm = () => {
 
                     </div>
 
-                    <p>{ tagLimit - tags.length } Tags Left</p>
+                    <p className="mt-1 mb-4 text-dark-grey text-right">{ tagLimit - tags.length } Tags Left</p>
 
-                    <button onClick={publishBlog}>Publish</button>
+                    <button className="btn-dark px-8" onClick={publishBlog}>Publish</button>
 
                 </div>
-
-            </div>
 
         </section>
         
