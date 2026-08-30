@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
 import { initializeApp, cert } from 'firebase-admin/app';
-import serviceAccountKey from './blog-firebase-adminsdk.json' with { type: "json" };
+const serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_KEY);
 import { getAuth } from 'firebase-admin/auth';
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
