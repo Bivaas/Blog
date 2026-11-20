@@ -8,6 +8,8 @@ import MinimalBlogPost from "../components/nobanner-blog-post.component";
 import NoDataMessage from "../components/nodata";
 import { filterPaginationData } from "../common/filter-pg-data";
 
+import LoadMoreDataBtn from "../components/loadmore.component";
+
 
 const HomePage = () => {
 
@@ -37,11 +39,19 @@ const HomePage = () => {
     // post req to search-blogs
     const fetchBlogsByCategory = () => {
 
-        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { tag: pageState } )
+        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { tag: pageState, page } )
 
-        .then(({ data}) => {
+        .then(async ({ data}) => {
             
-            setBlogs(data.blogs);
+            let formatedData = await filterPaginationData({ 
+
+                state: blogs,
+                data: data.blogs, page,
+                countRoute: "/search-blogs-count",
+                data_to_send: { tag: pageState }
+            })
+
+            setBlogs(formatedData);
         })
 
         .catch(err => {
@@ -91,7 +101,7 @@ const HomePage = () => {
             fetchLatestBlogs({ page: 1 });
         }
         else {
-            fetchBlogsByCategory();
+            fetchBlogsByCategory( { page: 1 } );
         }
 
         if (!trendingBlogs) {
@@ -112,6 +122,7 @@ const HomePage = () => {
                 <InPageNavigation routes={[ pageState, "trending blogs" ]} defaultHidden={[ "trending blogs" ]}>
 
                     {/* Latest blogs */}
+                    <>
                     {
                         blogs == null ? (
                             <Loader />
@@ -124,6 +135,13 @@ const HomePage = () => {
                             : <NoDataMessage message="no blogs found !" />
                         )
                     }
+
+                    <LoadMoreDataBtn state={blogs} fetchDataFun={pageState == "home"
+                        ? fetchLatestBlogs
+                        : fetchBlogsByCategory
+                    } />
+
+                    </>
 
                     {/* trending blogs here */}
                     {
