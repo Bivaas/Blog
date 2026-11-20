@@ -6,7 +6,10 @@ import Loader from "../components/loader.component";
 import BlogPostCard from "../components/blog-post.component";
 import MinimalBlogPost from "../components/nobanner-blog-post.component";
 
+
 const HomePage = () => {
+
+    let categories = [ "programming", "hollywood", "film making", "social media", "cooking", "tech", "aviation", "finances", "travel" ];
 
     const [ blogs, setBlogs ] = useState(null);
     const [ trendingBlogs, setTrendingBlogs ] = useState(null);
@@ -88,8 +91,49 @@ const HomePage = () => {
 
             </div>
 
-            {/* filters and trending ones */}
-            <div>
+            {/* filters and trending  */}
+            <div className = "min-w-[40%] lg:min-w-[400px] max-w-min border-1 pl-8 pt-3 max-md:hidden">
+
+                <div className="flex flex-col gap-10">
+
+                    {/* category */}
+                    <div>
+                        <h1 className="font-medium text-xl mb-8">Interests</h1>
+
+                        <div className="flex gap-3 flex-wrap">
+
+                            {
+                                categoties.map((category, i) => {
+
+                                    return 
+                                    <button key={i} className="tag">{ category }</button>
+                                })
+                            }
+                        </div>
+
+                    </div>
+
+                        {/* trending */}
+                        <div>
+                            <h1 className="font-medium text-xl mb-8">Trending
+                                <i className="fi fi-rr-arrow-trend-up ml-2"></i>
+                            </h1>
+
+                            {
+                                trendingBlogs == null ? (
+                                    <Loader/>
+
+                                ) : (
+                                    trendingBlogs.map((blog, i) => {
+
+                                        return <MinimalBlogPost key={i} blog={blog} index={i} />
+                                    })
+                                )
+                            }
+
+                        </div>
+
+                </div>
 
             </div>
 

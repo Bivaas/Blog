@@ -10,8 +10,14 @@ import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
 import { initializeApp, cert } from 'firebase-admin/app';
-const serviceAccountKey = JSON.parse(process.env.FIREBASE_SERVICE_KEY);
 import { getAuth } from 'firebase-admin/auth';
+import fs from 'fs';
+
+const serviceAccountKey = process.env.FIREBASE_SERVICE_KEY 
+    ? JSON.parse(process.env.FIREBASE_SERVICE_KEY)
+    : JSON.parse(fs.readFileSync(
+        './blog-firebase-adminsdk.json', 'utf8'
+    ));
 
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -285,7 +291,7 @@ server.post("/signup", (req, res) => {
         .sort({ 
 
             "activity.total_reads": -1,
-            "activity-total_likes": -1,
+            "activity.total_likes": -1,
             "publishedAt": -1
         })
 
