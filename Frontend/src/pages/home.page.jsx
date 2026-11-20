@@ -1,4 +1,4 @@
-import InPageNavigation from "../components/inpage-navigation.component";
+import InPageNavigation, { activeTabRef } from "../components/inpage-navigation.component";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -13,6 +13,7 @@ const HomePage = () => {
 
     const [ blogs, setBlogs ] = useState(null);
     const [ trendingBlogs, setTrendingBlogs ] = useState(null);
+    const [ pageState, setPageState ] = useState("home");
 
     const fetchLatestBlogs = () => {
 
@@ -43,12 +44,37 @@ const HomePage = () => {
         })
     }
 
+    // cat click
+    const loadBlogByCategory = (e) => {
+
+        let category = e.trager.innerText.toLowerCase();
+
+        setBlogs(null);
+
+        if (pageState == category) {
+
+            setPageState("home");
+            return;
+        }
+
+        setPageState(category);
+    }
 
     useEffect(() => {
 
-        fetchLatestBlogs();
-        fetchTrendingBlogs();
-    }, [])
+        activeTabRef.current.click();
+
+        if (pageState == "home") {
+
+            fetchLatestBlogs();
+        }
+
+        if (!trendingBlogs) {
+
+            fetchTrendingBlogs();
+        }
+
+    }, [pageState])
 
 
     return (
@@ -58,8 +84,7 @@ const HomePage = () => {
             {/* latest blogs */}
             <div className="w-full">
 
-                <InPageNavigation routes={["home", "trending blogs"]} defaultHidden={["trending blogs"]}>
-
+                <InPageNavigation routes={[ pageState, "trending blogs" ]} defaultHidden={[ "trending blogs" ]}>
 
                     {/* Latest blogs */}
                     {
@@ -103,10 +128,13 @@ const HomePage = () => {
                         <div className="flex gap-3 flex-wrap">
 
                             {
-                                categoties.map((category, i) => {
+                                categories.map((category, i) => {
 
                                     return 
-                                    <button key={i} className="tag">{ category }</button>
+                                    <button key={i} onClick={loadBlogByCategory} className={"tag " + (pageState == category 
+                                        ? "bg-black text-white"
+                                        : "")}>
+                                    { category }</button>
                                 })
                             }
                         </div>

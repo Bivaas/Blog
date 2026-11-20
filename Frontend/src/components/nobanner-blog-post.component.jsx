@@ -10,7 +10,7 @@ const MinimalBlogPost = ({ blog, index }) => {
 
     return (
 
-        <Link to={`/blog/${id}`} claasName="flex gap-5 mb-8">
+        <Link to={`/blog/${id}`} className="flex gap-5 mb-8">
 
             <h1 className="blog-index">
                 

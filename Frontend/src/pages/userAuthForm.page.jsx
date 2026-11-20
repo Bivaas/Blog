@@ -114,8 +114,8 @@ const UserAuthForm = ({ type }) => {
             <Toaster />
             <form id="formElement" className="w-[80%] max-w-[400px]">
 
-                <h1 className="text-4xl font-gelasio capitalize text-center mb-24">
-                    {type == "sign-in" ? "Welcome back" : "Join us today" }
+                <h1 className="text-4xl capitalize text-center mb-24">
+                    {type == "sign-in" ? "Welcome back" : "Join Us" }
                 </h1>
 
 
@@ -180,7 +180,7 @@ const UserAuthForm = ({ type }) => {
 
                 :
 
-                <p className="mt-6 text-dark-grey text-xl text-center">
+                <p className="mt-6 text-xl text-center">
                     Got an account ? 
                     <Link to="/signin" className="text-black text-xl ml-1">Sign in</Link>
                 </p>
