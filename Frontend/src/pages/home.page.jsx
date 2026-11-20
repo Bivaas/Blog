@@ -28,6 +28,22 @@ const HomePage = () => {
         })
     }
 
+    // post req to search-blogs
+    const fetchBlogsByCategory = () => {
+
+        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { tag: pageState } )
+
+        .then(({ data}) => {
+            
+            setBlogs(data.blogs);
+        })
+
+        .catch(err => {
+
+            console.log(err);
+        })
+    }
+
     // fetch function
     const fetchTrendingBlogs = () => {
 
@@ -67,6 +83,9 @@ const HomePage = () => {
         if (pageState == "home") {
 
             fetchLatestBlogs();
+        }
+        else {
+            fetchBlogsByCategory();
         }
 
         if (!trendingBlogs) {
