@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Loader from "../components/loader.component";
 import BlogPostCard from "../components/blog-post.component";
 import MinimalBlogPost from "../components/nobanner-blog-post.component";
+import NoDataMessage from "../components/nodata";
+import { filterPaginationData } from "../common/filter-pg-data";
 
 
 const HomePage = () => {
@@ -15,16 +17,20 @@ const HomePage = () => {
     const [ trendingBlogs, setTrendingBlogs ] = useState(null);
     const [ pageState, setPageState ] = useState("home");
 
-    const fetchLatestBlogs = () => {
+    const fetchLatestBlogs = ({ page = 1 }) => {
 
-        axios.get(import.meta.env.VITE_DOMAIN + "/latest-blogs")
-        .then (( { data }) => {
+        axios.post(import.meta.env.VITE_DOMAIN + "/latest-blogs", { page })
 
-            setBlogs(data.blogs);
-        }) 
-        .catch (err => {
+        .then (async({ data }) => {
 
-            console.log(err);
+            let formatedData = await filterPaginationData ({ 
+
+                stats: blogs,
+                data: data.blogs, page,
+                countRoute: "/all-latest-blogs-count"
+            })
+
+            setBlogs(formatedData);
         })
     }
 
@@ -82,7 +88,7 @@ const HomePage = () => {
 
         if (pageState == "home") {
 
-            fetchLatestBlogs();
+            fetchLatestBlogs({ page: 1 });
         }
         else {
             fetchBlogsByCategory();
@@ -111,10 +117,11 @@ const HomePage = () => {
                             <Loader />
                         ) : (
 
-                            blogs.map((blog, i) => {
+                            blogs.results.length ? blogs.results.map((blog, i) => {
 
-                               return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
-                            })
+                                return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
+                                })
+                            : <NoDataMessage message="no blogs found !" />
                         )
                     }
 
@@ -124,10 +131,11 @@ const HomePage = () => {
                             <Loader />
 
                         ) : (
-                            trendingBlogs.map((blog, i) => {
+                            trendingBlogs.length ? trendingBlogs.map((blog, i) => {
 
                                 return <MinimalBlogPost key={i} blog={blog} index={i} />
                             })
+                        : <NoDataMessage message="No trending blogs" />
                         )
                     }
 

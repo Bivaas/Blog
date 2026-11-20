@@ -257,13 +257,15 @@ server.post("/signup", (req, res) => {
     })
 
     // get route to render blogs without auth 
-    server.get('/latest-blogs', (req, res) => {
+    server.post('/latest-blogs', (req, res) => {
 
+        let { page } = req.body;
         Blog.find({ draft: false })
 
         .populate("author", "personal_info.profile_img personal_info.username personal_info.fullname -_id")
         .sort({ "publishedAt": -1 })
         .select("blog_id title des banner activity tags publishedAt -_id")
+        .skip((page -1) * maxLimit)
         .limit(maxLimit)
         .then(blogs => {
 
@@ -273,6 +275,25 @@ server.post("/signup", (req, res) => {
         .catch(err => {
 
             return res.status(500).json({ "error": err.message })
+        })
+    })
+
+    // all total published blogs
+    server.post('/all-latest-blogs-count', (req, res) => {
+
+        Blog.countDocuments({ draft: false })
+
+        .then(count => {
+
+            return res.status(200)
+                .json({ totalDocs: count })
+        })
+
+        .catch(err => {
+
+            console.log(err.message);
+
+            return res.status(500).json({ "error": err.message})
         })
     })
 
