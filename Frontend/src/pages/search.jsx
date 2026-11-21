@@ -8,7 +8,7 @@ import BlogPostCard from "../components/blog-post.component";
 import NoDataMessage from "../components/nodata";
 import LoadMoreDataBtn from "../components/loadmore.component";
 import { filterPaginationData } from "../common/filter-pg-data";
-import UserCard from "../components/usercard.component";
+import UserCard from "../components/usercard";
 
 
 const SearchPage = () => {

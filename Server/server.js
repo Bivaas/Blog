@@ -416,6 +416,29 @@ server.post("/signup", (req, res) => {
         })
     })
 
+    // usr public profile 
+    server.post('/get-profile', (req, res) => {
+
+        let { username } = req.body;
+
+        User.findOne({
+
+            "peronal_info.username": username
+        })
+
+        .select("-personal_info.password " + "-google_auth -updatedAi -blogs")
+
+        .then(user => {
+
+            return res.status(200).json(user)
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+
 
     //  URL parameter and query update and readcount
     server.get('/get-blog/:blog_id', (req, res) => {
