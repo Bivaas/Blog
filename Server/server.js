@@ -330,12 +330,22 @@ server.post("/signup", (req, res) => {
         })
     })
 
-    // filter for search blogs
+    // filter w search 
     server.post('/search-blogs', (req, res) => {
 
-        let { tag, page } = req.body;
-        let findQuery = { tags: tag, draft: false };
+        let { tag, query, page } = req.body;
         let maxLimit = 5;
+        let findQuery;
+
+        if (tag) {
+
+            findQuery = { tags: tag, draft: false };
+        }
+        else if (query) {
+
+            findQuery = { draft: false, title: new RegExp(query, 'i') }
+        }
+
 
         Blog.find(findQuery) 
 
@@ -366,7 +376,7 @@ server.post("/signup", (req, res) => {
     //  blogs count
     server.post('/search-blogs-count', (req, res) => {
 
-        let { tag } = req.body;
+        let { tag, query } = req.body;
         let findQuery = { tags: tag, draft: false };
 
         Blog.countDocuments(findQuery).then(count => {

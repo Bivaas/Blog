@@ -35,9 +35,17 @@ const SearchPage = () => {
         .catch(err => console.log(err));
     }
 
+    // reset function for after search
+    const resetState = () => {
+        
+        setBlogs(null);
+    }
+
+
     useEffect(() => {
 
-        searchBlogs({ page: 1 });
+        resetState();
+        searchBlogs({ page: 1, create_new_arr: true });
     }, [query])
 
 
@@ -66,10 +74,10 @@ const SearchPage = () => {
             )
         }
 
-        {/* <LoadMoreDataBtn 
+        <LoadMoreDataBtn 
             state={blogs}
             fetchDataFun={searchBlogs} 
-        /> */}
+        />
 
                 </>
 
