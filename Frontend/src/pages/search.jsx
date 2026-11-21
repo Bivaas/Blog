@@ -25,7 +25,7 @@ const SearchPage = () => {
             let formatedData = await filterPaginationData({ 
 
                 state: blogs,
-                date: data.blogs, page,
+                data: data.blogs, page,
                 countRoute: "/search-blogs-count",
                 data_to_send: { query }, create_new_arr
 
@@ -93,7 +93,7 @@ const SearchPage = () => {
 
             <div className="w-full">
 
-                <inPageNavigation routes={[ `result for: "${query}`, "matched"]} defaultHidden={["matched"]}>
+                <InPageNavigation routes={[ `result for: "${query}`, "matched"]} defaultHidden={["matched"]}>
 
                 <>
 
@@ -121,7 +121,7 @@ const SearchPage = () => {
 
                 <UserCardWrapper/>
 
-                </inPageNavigation>
+                </InPageNavigation>
 
             </div>
 

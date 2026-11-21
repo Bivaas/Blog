@@ -27,7 +27,7 @@ const HomePage = () => {
 
             let formatedData = await filterPaginationData ({ 
 
-                stats: blogs,
+                state: blogs,
                 data: data.blogs, page,
                 countRoute: "/all-latest-blogs-count"
             })
@@ -37,7 +37,7 @@ const HomePage = () => {
     }
 
     // post req to search-blogs
-    const fetchBlogsByCategory = () => {
+    const fetchBlogsByCategory = ({ page = 1 }) => {
 
         axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { tag: pageState, page } )
 
@@ -79,7 +79,7 @@ const HomePage = () => {
     // cat click
     const loadBlogByCategory = (e) => {
 
-        let category = e.trager.innerText.toLowerCase();
+        let category = e.target.innerText.toLowerCase();
 
         setBlogs(null);
 

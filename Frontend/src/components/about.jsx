@@ -2,18 +2,18 @@ import { Link } from "react-router-dom";
 import { getFullDay } from "../common/date";
 
 // bio, social link n join date
-const AboutUser = ({ bio, social_links, }) => {
+const AboutUser = ({ bio, social_links, joinedAt }) => {
 
     return (
 
-        <div>
+        <div className="md:w-[90%] md:mt-7">
 
-            <p>
+            <p className="text-xl leading-7">
                 { bio.length ? bio : "tell us about yourself"}
             </p>
 
             {/* social link */}
-            <div>
+            <div className="flex gap-x-7 gap-y-2 flex-wrap my-7 items-center">
                 {
                     Object.keys(social_links).map((key) => {
 
@@ -23,7 +23,7 @@ const AboutUser = ({ bio, social_links, }) => {
 
                             <Link to={link} key={key} target="_blank">
 
-                                <i className={"fi " + (key != "website" ? "fi-brands-" + key : "fi-rr-blobe")}></i> 
+                                <i className={"fi " + (key != "website" ? "fi-brands-" + key : "fi-rr-blobe") + " text-2xl"}></i> 
 
                             </Link>
 
@@ -34,7 +34,7 @@ const AboutUser = ({ bio, social_links, }) => {
             </div>
 
             {/* join date */}
-            <p>Joined on { getFullDay(joinedAt) }</p>
+            <p className="text-xl leading-7">Joined on { getFullDay(joinedAt) }</p>
 
         </div>
     )

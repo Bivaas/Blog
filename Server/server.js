@@ -355,7 +355,7 @@ server.post("/signup", (req, res) => {
 
         .populate("author", 
 
-            "personal_info.profile_img" +
+            "personal_info.profile_img " +
             "personal_info.username " +
             "personal_info.fullname -_id")
 
@@ -381,7 +381,21 @@ server.post("/signup", (req, res) => {
     server.post('/search-blogs-count', (req, res) => {
 
         let { tag, query, author } = req.body;
-        let findQuery = { tags: tag, draft: false };
+        let findQuery;
+
+        // filter 
+        if (tag) {
+
+            findQuery = { tags: tag, draft: false };
+        }
+        else if (query) {
+
+            findQuery = { draft: false, title: new RegExp(query, 'i')};
+        }
+        else if (author) {
+
+            findQuery = { author, draft: false };
+        }
 
         Blog.countDocuments(findQuery).then(count => {
 
@@ -427,7 +441,7 @@ server.post("/signup", (req, res) => {
 
         User.findOne({
 
-            "peronal_info.username": username
+            "personal_info.username": username
         })
 
         .select("-personal_info.password " + "-google_auth -updatedAi -blogs")

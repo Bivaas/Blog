@@ -3,10 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { UserContext } from "../App";
+import PageNotFound from "./404.page";
 import Loader from "../components/loader.component";
 import AboutUser from "../components/about";
 
-import InPageNavigation from "../components/blog-post.component";
+import InPageNavigation from "../components/inpage-navigation.component";
+import BlogPostCard from "../components/blog-post.component";
 import NoDataMessage from "../components/nodata";
 import LoadMoreDataBtn from "../components/loadmore.component";
 import { filterPaginationData } from "../common/filter-pg-data";
@@ -41,6 +43,7 @@ const ProfilePage = () => {
 
     let [ loading, setLoading ] = useState(true);
     let [ blogs, setBlogs ] = useState(null);
+    let [ profileLoaded, setProfileLoaded ] = useState("");
 
     let { personal_info: { fullname, username: profile_username, profile_img, bio },
 
@@ -55,8 +58,13 @@ const ProfilePage = () => {
 
         .then(({ data: user }) => {
 
-            setProfile(user);
-            getBlogs({ user_id: user._id });
+            if (user != null) {
+
+                setProfile(user);
+                getBlogs({ user_id: user._id });
+            }
+
+            setProfileLoaded(profileId);
             setLoading(false);
         })
 
@@ -73,7 +81,7 @@ const ProfilePage = () => {
             ? blogs.user_id
             : user_id;
 
-        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { author: user_id, page } 
+        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { author: user_id, page }) 
             .then(async ({ data}) => {
 
                 let formatedData = await filterPaginationData({
@@ -87,7 +95,6 @@ const ProfilePage = () => {
                 formatedData.user_id = user_id;
                 setBlogs(formatedData);
             })
-        )
     }
 
     // profile reset
@@ -95,23 +102,33 @@ const ProfilePage = () => {
 
         setProfile(profileDataStructure);
         setLoading(true);
+        setProfileLoaded("");
     }
 
     useEffect(() => {
 
-        resetStates();
-        fetchUserProfile();
-    }, [profileId])
+        if (profileId != profileLoaded) {
+
+            setBlogs(null);
+        }
+
+        if (blogs == null) {
+
+            resetStates();
+            fetchUserProfile();
+        }
+    }, [profileId, blogs])
 
 
     return (
 
         loading ? <Loader /> :
+        profile_username.length ?
         <section className="h-cover md:flex flex-row-reverse items-start gap-5 min-[1100px]:gap-12">
 
-            <div className="flex flex-col max-md:items-center gap-5 min-w-[250px]">
+            <div className="flex flex-col max-md:items-center gap-5 min-w-[250px] md:w-[50%] md:pl-8 md:border-1 md:sticky md:top-[100px] md:py-10">
 
-                <img src={profile_img} className="w-48 h-48 rounded-full md:w-32 md:h-32" />
+                <img src={profile_img} className="w-48 h-48 bg-grey rounded-full md:w-32 md:h-32" />
 
                 <h1 className="text-2xl font-medium">
 
@@ -131,7 +148,7 @@ const ProfilePage = () => {
                     {
                         profileId == username ?
 
-                        <link to="/settings/edit-profile" className="btn-light rounded-md">Edit</link>
+                        <Link to="/settings/edit-profile" className="btn-light rounded-md">Edit</Link>
 
                         : ""
                     }
@@ -145,18 +162,18 @@ const ProfilePage = () => {
             </div>
 
             {/* blog and about */}
-            <div>
+            <div className="max-md:mt-12 w-full">
 
-                <InPageNavigation route={[ "Blogs Published", "About" ]}
+                <InPageNavigation routes={[ "Blogs Published", "About" ]}
                     defaultHidden={[ "About"]}>
 
                     <>
                     {
-                        blog == null ? (
+                        blogs == null ? (
                             <Loader />
                         
                         ) : ( 
-                            blogs.result.length ? blogs.results.map((blog, i) => {
+                            blogs.results.length ? blogs.results.map((blog, i) => {
 
                                 return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
 
@@ -176,6 +193,8 @@ const ProfilePage = () => {
             </div>
 
         </section>
+
+        : <PageNotFound />
     )
 }
 

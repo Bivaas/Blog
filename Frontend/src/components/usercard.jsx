@@ -9,7 +9,8 @@ const UserCard = ({ user }) => {
 
         <Link to={`/user/${username}`} className="flex gap-5 items-center mb-5">
 
-            <img src={profile_img} className="flex gap-5 items-center mb-5">
+            {/* avatar */}
+            <img src={profile_img} className="w-14 h-14 rounded-full" />
             
             <div>
 
@@ -19,7 +20,6 @@ const UserCard = ({ user }) => {
 
             </div>
             
-            </img>
 
         </Link>
     )

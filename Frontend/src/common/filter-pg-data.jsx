@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const filterPaginationData = async ({ 
 
-    create_new_err = false, state, data, page, countRoute, data_to_send = {} }) => {
+    create_new_arr = false, state, data, page, countRoute, data_to_send = {} }) => {
 
         let obj;
 
