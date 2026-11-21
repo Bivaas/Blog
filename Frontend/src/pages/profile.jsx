@@ -6,6 +6,11 @@ import { UserContext } from "../App";
 import Loader from "../components/loader.component";
 import AboutUser from "../components/about";
 
+import InPageNavigation from "../components/blog-post.component";
+import NoDataMessage from "../components/nodata";
+import LoadMoreDataBtn from "../components/loadmore.component";
+import { filterPaginationData } from "../common/filter-pg-data";
+
 
 export const profileDataStructure = {
 
@@ -35,6 +40,7 @@ const ProfilePage = () => {
     let [ profile, setProfile ] = useState(profileDataStructure);
 
     let [ loading, setLoading ] = useState(true);
+    let [ blogs, setBlogs ] = useState(null);
 
     let { personal_info: { fullname, username: profile_username, profile_img, bio },
 
@@ -50,6 +56,7 @@ const ProfilePage = () => {
         .then(({ data: user }) => {
 
             setProfile(user);
+            getBlogs({ user_id: user._id });
             setLoading(false);
         })
 
@@ -57,6 +64,30 @@ const ProfilePage = () => {
 
             setLoading(false);
         })
+    }
+
+    // usr blog fetch with stored id
+    const getBlogs = ({ page = 1, user_id }) => {
+
+        user_id = user_id == undefined
+            ? blogs.user_id
+            : user_id;
+
+        axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs", { author: user_id, page } 
+            .then(async ({ data}) => {
+
+                let formatedData = await filterPaginationData({
+
+                    state: blogs,
+                    data: data.blogs, page,
+                    countRoute: "/search-blogs-count",
+                    data_to_send: { author: user_id }
+                })
+
+                formatedData.user_id = user_id;
+                setBlogs(formatedData);
+            })
+        )
     }
 
     // profile reset
@@ -110,6 +141,37 @@ const ProfilePage = () => {
                 {/* about panel */}
 
                 <AboutUser bio={bio} social_links={social_links} joinedAt={joinedAt} />
+
+            </div>
+
+            {/* blog and about */}
+            <div>
+
+                <InPageNavigation route={[ "Blogs Published", "About" ]}
+                    defaultHidden={[ "About"]}>
+
+                    <>
+                    {
+                        blog == null ? (
+                            <Loader />
+                        
+                        ) : ( 
+                            blogs.result.length ? blogs.results.map((blog, i) => {
+
+                                return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
+
+                            })
+
+                            : <NoDataMessage message="user has no blogs published !" />
+
+                        )
+                    }
+
+                    <LoadMoreDataBtn state={blogs} fetchDataFun={getBlogs} />
+
+                    </>
+
+                    </InPageNavigation>
 
             </div>
 
