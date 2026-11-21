@@ -10,7 +10,7 @@ import BlogPage from "./pages/blog.page";
 
 import SearchPage from "./pages/search";
 import PageNotFound from "./pages/404.page";
-import ProfilePage from "./pages/profile.page";
+import ProfilePage from "./pages/profile";
 
 const App = () => { 
 
