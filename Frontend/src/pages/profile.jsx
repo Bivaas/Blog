@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { UserContext } from "../App";
 import Loader from "../components/loader.component";
+import AboutUser from "../components/about";
 
 
 export const profileDataStructure = {
@@ -105,6 +106,10 @@ const ProfilePage = () => {
                     }
 
                 </div>
+
+                {/* about panel */}
+
+                <AboutUser bio={bio} social_links={social_links} joinedAt={joinedAt} />
 
             </div>
 
