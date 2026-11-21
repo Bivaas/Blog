@@ -17,7 +17,7 @@ const BlogPage = () => {
 
     const fetchBlog = () => {
 
-        axios.get(import.meta.env.VITE_DOMAIN + "/get-blog/" + blog_id)
+        axios.post(import.meta.env.VITE_DOMAIN + "/get-blog/" + { blog_id } )
         .then ( ( { data: { blog } }) => {
 
             if (!blog) {

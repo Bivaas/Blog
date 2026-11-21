@@ -33,7 +33,6 @@ const App = () => {
         <Routes>
             
             <Route path="/editor" element={<Editor />} />
-            <Route path="/blog/:blog_id" element={<BlogPage />} />
             <Route path="/" element={<Navbar />}>
 
                 <Route index element={<HomePage />} />
@@ -42,6 +41,7 @@ const App = () => {
             <Route path="signup" element={<UserAuthForm type="sign-up" />} />
             <Route path="search/:query" element={<SearchPage />} />
 
+            <Route path="blog/:blog_id" element={<BlogPage />} />
             <Route path="*" element={ <PageNotFound /> } />
             <Route path="user/:id" element={<ProfilePage/>} />
 

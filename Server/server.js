@@ -459,19 +459,31 @@ server.post("/signup", (req, res) => {
 
 
     //  URL parameter and query update and readcount
-    server.get('/get-blog/:blog_id', (req, res) => {
+    server.post('/get-blog', (req, res) => {
 
-        let { blog_id } = req.params;
+        let { blog_id } = req.body;
+        let incrementVal = 1;
 
-        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": 1}}, { new: true })
+        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": incrementVal }}, { new: true })
+
         .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
         .select("title des content banner activity publishedAt blog_id tags")
+
         .then(blog => {
 
             if (!blog) {
 
                 return res.status(404).json({ "error": "No blog found with that id" })
             }
+
+            // profile total
+            User.findOneAndUpdate( { "personal_info.username": blog.author.personal_info.username },
+                { $inc: { "account_info.total_reads";
+                    incrementVal
+                }}
+            )
+
+            .catch(err => console.log(err.message));
 
             return res.status(200).json({ blog })
         })
