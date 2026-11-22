@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import { getDay } from "../common/date";
 import Loader from "../components/loader.component";
 import BlogContent from "../components/blog-content.component";
+import BlogInteraction from "../components/blog-interaction";
 
+
+export const BlogContext = createContext({ });
 
 // fetch and header for blog page
 const BlogPage = () => { 
@@ -49,6 +52,7 @@ const BlogPage = () => {
         :
         blog == null ? <Loader />
         :
+        <BlogContext.Provider value={{ blog, setBlog }}>
         <div className="max-w-[900px] mx-auto py-10 px-[5vw]">
 
             <img src={blog.banner} className="aspect-video w-full" />
@@ -73,6 +77,9 @@ const BlogPage = () => {
 
             </div>
 
+            {/* like, comment, share, edit bar */}
+            <BlogInteraction />
+
             <div className="my-12 font-gelasio blog-page-content">
                 {
                     (blog.content?.[0]?.blocks ?? []).map((block, i) => {
@@ -85,6 +92,8 @@ const BlogPage = () => {
             </div>
 
         </div>
+
+        </BlogContext.Provider>
     )
 }
 

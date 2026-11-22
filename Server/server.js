@@ -478,7 +478,7 @@ server.post("/signup", (req, res) => {
 
             // profile total
             User.findOneAndUpdate( { "personal_info.username": blog.author.personal_info.username },
-                { $inc: { "account_info.total_reads";
+                { $inc: { "account_info.total_reads":
                     incrementVal
                 }}
             )
