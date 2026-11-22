@@ -7,6 +7,8 @@ import Loader from "../components/loader.component";
 import BlogContent from "../components/blog-content.component";
 import BlogInteraction from "../components/blog-interaction";
 
+import BlogPostCard from "../components/blog-post.component";
+
 
 export const BlogContext = createContext({ });
 
@@ -17,6 +19,7 @@ const BlogPage = () => {
 
     const [ blog, setBlog ] = useState(null);
     const [ notFound, setNotFound ] = useState(false);
+    const [ similarBlogs, setSimilarBlogs ] = useState(null);
 
     const fetchBlog = () => {
 
@@ -27,6 +30,17 @@ const BlogPage = () => {
 
                 return setNotFound(true);
             }
+
+            // upto 6 limit with first tag
+            axios.post(import.meta.env.VITE_DOMAIN + "/search-blogs",
+
+                { tag: blog.tags[0], limit: 6, eliminate_blog: blog_id }
+            )
+            .then(( { data }) => {
+
+                setSimilarBlogs
+            })
+
 
             setBlog(blog);
         })
@@ -41,6 +55,7 @@ const BlogPage = () => {
 
         setBlog(null);
         setNotFound(false);
+        setSimilarBlogs(null);
 
         fetchBlog();
     }, [blog_id])
@@ -90,6 +105,26 @@ const BlogPage = () => {
                     })
                 }
             </div>
+
+            <BlogInteraction />
+
+            {
+                similarBlogs != null & similarBlogs.length ? 
+
+                <>
+                    <h2>Similar Blogs:</h2>
+
+                    {
+                        similarBlogs.map((similarBlog, i) => {
+
+                            return <BlogPostCard key={i} content={similarBlog} author={similarBlog.author.personal_info} />
+
+                            })
+                    }
+                </>
+
+                : ""
+            }
 
         </div>
 

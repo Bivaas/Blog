@@ -1,14 +1,19 @@
 import { useContext } from "react";
 import { BlogContext } from  "../pages/blog.page";
- 
+import { UserContext } from "../App";
+import { Link } from "react-router-dom";
+  
 // like, comment, share, edit
 const BlogInteraction = () => {
 
-    let { blog: { blog_id, activity,
+    let { blog: { title, blog_id, activity,
          activity: { total_likes, total_comments },
          author: { personal_info: { username: author_username } }},
 
         setBlog } = useContext(BlogContext);
+
+        // logged in check
+        let { userAuth: { username }} = useContext(UserContext);
 
     return (
 
@@ -17,6 +22,9 @@ const BlogInteraction = () => {
             <hr />
 
             <div>
+
+                <div>
+
                 <div>
                     {/* like n count */}
                     <button>
@@ -37,6 +45,24 @@ const BlogInteraction = () => {
                     </button>
 
                     <p>{ total_comments }</p>
+
+                </div>
+
+                </div>
+
+                {/* edit link */}
+                <div>
+
+                    {
+                        username == author_username ?
+                            <Link to={`/editor/${blog_id}`}>
+                                Edit
+                            </Link>
+
+                        : ""
+                    }
+
+                    
 
                 </div>
 

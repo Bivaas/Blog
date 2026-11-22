@@ -81,6 +81,21 @@ const BlogContent = ({ block }) => {
 
         return <List style={data.style} items={data.items} />
     }
+
+    // embedded video
+    if (type == "embed") {
+
+        return (
+
+            <div>
+
+                <iframe src={data.embed} width={data.width} height={data.height} allowFullScreen> </iframe>
+
+                { data.caption ? <p>{ data.caption }</p> : "" }
+
+            </div>
+        )
+    }
 }
 
 

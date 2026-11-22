@@ -333,13 +333,13 @@ server.post("/signup", (req, res) => {
     // filter w search 
     server.post('/search-blogs', (req, res) => {
 
-        let { tag, query, author, page } = req.body;
-        let maxLimit = 5;
+        let { tag, query, author, page = 1, limit, eliminate_blog } = req.body;
+        let maxLimit = limit ? limit : 5 ;
         let findQuery;
 
         if (tag) {
 
-            findQuery = { tags: tag, draft: false };
+            findQuery = { tags: tag, draft: false, blog_id: { $ne: eliminate_blog} };
         }
         else if (query) {
 
