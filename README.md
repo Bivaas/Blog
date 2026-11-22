@@ -8,15 +8,7 @@ I originally thought of building this to write whatever comes into my mind. I al
 
 Firstly, all blogs are public and appears in homepage. For login, manual credentials or google oauth login is available and username is set accordingly. For blog, banner, title, short description, tags and main contents can be written. The tags help in search and ranking later on. since this is mvp project, basic working and flow of blog submission works here. 
 
-## What doesn't work:
-
--Profile 
--Dashboard 
--Settings
--Delete / edit blogs
-
-Because the current project is mvp only and will be adding those after sometimes :)
-(got project rejection because those routes had nothing but was in navbar UI)
+comments sorted by newest first
 
 *Home page showing all public blogs*
 ![Screenshot](Frontend/uploads/home-page.png)

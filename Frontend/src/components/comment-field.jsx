@@ -11,9 +11,12 @@ const CommentField = ({ action }) => {
     const [ comment, setComment ] = useState("");
 
     // blog and author id
-    let { blog: { _id, author: { _id: blog_author } }} = useContext(BlogContext);
+    let { blog, blog: { _id, author: { _id: blog_author},
+        comments, activity, activity: { total_comments, total_parent_comments }},
+        setBlog, setTotalParentCommentsLoaded } = useContext(BlogContext);  
 
-    let { userAuth: { access_token }} = useContext(UserContext);
+
+    let { userAuth: { access_token, username, fullname, profile_img }} = useContext(UserContext);
 
     // comment auth validation
     const handleComment = () => {
@@ -36,7 +39,33 @@ const CommentField = ({ action }) => {
 
         .then (({ data }) => {
 
-            console.log(data);
+            setComment("");
+
+            data.commented_by = {
+
+                personal_info: { username, profile_img, fullname }
+            };
+
+            data.childrenLevel = 0;
+
+            // new comment list
+            let newCommentArr = [ data ];
+
+            // blogstate comment
+            setBlog({ ...blog, 
+
+                comments: { ...comments, results: newCommentArr },
+                activity: { ...activity,
+                    total_comments: total_comments + 1,
+                    total_parent_comments: total_parent_comments + parentCommentIncrementval
+                }
+            })
+
+            setTotalParentCommentsLoaded(
+
+                preVal => preVal + parentCommentIncrementval
+            );
+
         })
 
         .catch(err => console.log(err));

@@ -9,7 +9,7 @@ import BlogContent from "../components/blog-content.component";
 import BlogInteraction from "../components/blog-interaction";
 
 import BlogPostCard from "../components/blog-post.component";
-import CommentsContainer from "../components/comments";
+import CommentsContainer, {fetchComments} from "../components/comments";
 
 export const BlogContext = createContext({ });
 
@@ -29,7 +29,7 @@ const BlogPage = () => {
     const fetchBlog = () => {
 
         axios.post(import.meta.env.VITE_DOMAIN + "/get-blog/" + { blog_id } )
-        .then ( ( { data: { blog } }) => {
+        .then (async ( { data: { blog } }) => {
 
             if (!blog) {
 
@@ -46,6 +46,10 @@ const BlogPage = () => {
                 setSimilarBlogs
             })
 
+            // comment attached (5)
+            blog.comments = await fetchComments({ blog_id: blog._id, 
+                setParentCommentCountFun: setTotalParentCommentsLoaded
+             })
 
             setBlog(blog);
         })
