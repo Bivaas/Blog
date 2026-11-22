@@ -106,7 +106,7 @@ const handlePublishEvent = () => {
 }
 
 
-let { blog, blog: { title, banner }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
+let { blog, blog: { title, banner, content }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
 
 
 
@@ -118,7 +118,9 @@ useEffect(() => {
         setTextEditor(new EditorJS ({
 
             holder: "textEditor",
-            data: { blocks: [] },
+            data: Array.isArray(content) && content.length 
+                ? content[0]
+                : { blocks: [] },
             tools: tools,
             placeholder: "write a crazy story..."
         }))

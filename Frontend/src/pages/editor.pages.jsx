@@ -1,6 +1,8 @@
 import { useContext, useState, createContext } from "react";
 import { UserContext } from "../App";
 import { Navigate } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/loader.component";
 
 import BlogEditor from "../components/blog-editor.component";
 import PublishForm from "../components/publish-form.component"; 
@@ -28,10 +30,36 @@ const Editor = () => {
 
     let { userAuth: { access_token } } = useContext(UserContext);
 
+    let { blog_id } = useParams();
+    const [ loading, setLoading ] = useState(true); 
+
+    // blog fetch in edit
+    useEffect(() => {
+
+        if (!blog_id) {
+
+            return setLoading(false);
+        }
+
+        axios.post(import.meta.env.VITE_DOMAIN + "/get-blog", { blog_id, draft: true, mode: "edit" } )
+
+        .then(( { data: { blog } }) => {
+
+            setBlog(blog);
+            setLoading(false);
+        })
+
+        .catch(err => {
+            setBlog(null);
+            setLoading(false);
+        })
+    }, [])
+
     return (
 
         access_token === null ? <Navigate to="/signin" />
         :
+        loading ? <Loader /> :
          <EditorContext.Provider value={{ blog, setBlog, textEditor, setTextEditor, editorState, setEditorState }}>
         
         {
