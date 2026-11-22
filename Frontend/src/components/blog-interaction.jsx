@@ -14,7 +14,7 @@ const BlogInteraction = () => {
          activity: { total_likes, total_comments },
          author: { personal_info: { username: author_username } }},
 
-        setBlog, isLikedByUser, setLikedByUser } = useContext(BlogContext);
+        setBlog, isLikedByUser, setLikedByUser, setCommentsWrapper } = useContext(BlogContext);
 
         // logged in check
         let { userAuth: { username, access_token }} = useContext(UserContext);
@@ -93,7 +93,7 @@ const BlogInteraction = () => {
 
                 <div>
                     {/* comment n count */}
-                    <button>
+                    <button onClick={() => setCommentsWrapper(preVal => !preVal)}>
 
                         <i className="fi fi-rr-comment-dots"></i>
 

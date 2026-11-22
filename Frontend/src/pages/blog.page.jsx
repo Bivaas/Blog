@@ -9,7 +9,7 @@ import BlogContent from "../components/blog-content.component";
 import BlogInteraction from "../components/blog-interaction";
 
 import BlogPostCard from "../components/blog-post.component";
-
+import CommentsContainer from "../components/comments";
 
 export const BlogContext = createContext({ });
 
@@ -22,6 +22,9 @@ const BlogPage = () => {
     const [ notFound, setNotFound ] = useState(false);
     const [ similarBlogs, setSimilarBlogs ] = useState(null);
     const [ isLikedByUser, setLikedByUser ] = useState(false);
+
+    const [ commentsWrapper, setCommentsWrapper ] = useState(false);
+    const [ totalParentCommentsLoaded, setTotalParentCommentsLoaded ] = useState(0);
 
     const fetchBlog = () => {
 
@@ -60,6 +63,9 @@ const BlogPage = () => {
         setSimilarBlogs(null);
         setLikedByUser(false);
 
+        setCommentsWrapper(false);
+        setTotalParentCommentsLoaded(0);
+
         fetchBlog();
     }, [blog_id])
 
@@ -70,9 +76,11 @@ const BlogPage = () => {
         :
         blog == null ? <Loader />
         :
-        <BlogContext.Provider value={{ blog, setBlog, isLikedByUser, setLikedByUser }}>
+        <BlogContext.Provider value={{ blog, setBlog, isLikedByUser, setLikedByUser, commentsWrapper, setCommentsWrapper, totalParentCommentsLoaded, setTotalParentCommentsLoaded  }}>
 
             <Toaster />
+            <CommentsContainer />
+
         <div className="max-w-[900px] mx-auto py-10 px-[5vw]">
 
             <img src={blog.banner} className="aspect-video w-full" />
