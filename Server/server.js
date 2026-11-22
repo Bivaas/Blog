@@ -3,8 +3,10 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
+
 import User from './schema/User.js';
 import Blog from './schema/Blog.js';
+import Notification from './schema/Notification.js';
 
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
@@ -602,6 +604,78 @@ server.post("/signup", (req, res) => {
         }
     })
 
+
+    // like or unlike
+    server.post("/like-blog", verifyJWT, (req, res) => {
+
+        let user_id = req.user;
+        let { _id, isLikedByUser } = req.body;
+
+        let incrementVal = !isLikedByUser ? 1 : -1;
+
+        Blog.findOneAndUpdate({ _id },
+
+            { $inc: { "activity.total_likes": incrementVal } }
+        )
+
+        .then(blog => {
+
+            if (!isLikedByUser) {
+
+                // author noti
+                let like = new Notification ({ type: "like", blog: _id, notification_for: blog.author, user: user_id })
+
+                like.save().then(notification => {
+
+                    return res.status(200).json({ liked_by_user: true })
+                })
+            }
+
+            else {
+
+                // del with unlike
+                Notification.findOneAndDelete ({
+                    
+                    user: user_id, blog: _id, type: "like" })
+                
+                .then(data => {
+
+                    return res.status(200).json({ liked_by_user: false })
+                })
+
+                .catch(err => {
+
+                    return res.status(500).json({ "error": err.message })
+                })
+            }
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+
+    })
+
+    // relike validation
+    server.post("/isliked-by-user", verifyJWT, (req, res) => {
+
+        let user_id = req.user;
+        let { _id } = req.body;
+
+        Notification.exists({ user: user_id, type: "like", blog: _id })
+
+        .then(result => {
+
+            return res.status(200).json({ result })
+        })
+
+        .catch(err => {
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+    
 
 
 
