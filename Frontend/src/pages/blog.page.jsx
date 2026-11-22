@@ -1,6 +1,7 @@
 import { useEffect, useState, createContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
 
 import { getDay } from "../common/date";
 import Loader from "../components/loader.component";
@@ -20,6 +21,7 @@ const BlogPage = () => {
     const [ blog, setBlog ] = useState(null);
     const [ notFound, setNotFound ] = useState(false);
     const [ similarBlogs, setSimilarBlogs ] = useState(null);
+    const [ isLikedByUser, setLikedByUser ] = useState(false);
 
     const fetchBlog = () => {
 
@@ -56,6 +58,7 @@ const BlogPage = () => {
         setBlog(null);
         setNotFound(false);
         setSimilarBlogs(null);
+        setLikedByUser(false);
 
         fetchBlog();
     }, [blog_id])
@@ -67,7 +70,9 @@ const BlogPage = () => {
         :
         blog == null ? <Loader />
         :
-        <BlogContext.Provider value={{ blog, setBlog }}>
+        <BlogContext.Provider value={{ blog, setBlog, isLikedByUser, setLikedByUser }}>
+
+            <Toaster />
         <div className="max-w-[900px] mx-auto py-10 px-[5vw]">
 
             <img src={blog.banner} className="aspect-video w-full" />

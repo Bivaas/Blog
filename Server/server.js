@@ -503,7 +503,7 @@ server.post("/signup", (req, res) => {
 
         let authorId = req.user;
 
-        let { title, des, banner, tags, content } = req.body;
+        let { title, des, banner, tags, content, id, draft } = req.body;
 
         // validation for all input components
         if (!title.length) {
@@ -534,8 +534,34 @@ server.post("/signup", (req, res) => {
         // tags into lowercase converter
         tags = tags.map(tag => tag.toLowerCase());
 
-        let blog_id = title.replace(/[^a-zA-Z0-9]/g, ' ').replace(/\s+/g, '-').trim() + nanoid();
-    
+        let blog_id = id || title.replace(/[^a-zA-Z0-9]/g, ' ')
+            .replace(/\s+/g, '-').trim() + nanoid();
+
+        if (id) {
+
+            // update and usr check
+            Blog.findOneAndUpdate( 
+                { blog_id, author: authorId},
+                { title, des, banner, content, tags, draft: draft ? draft : false}
+            )
+
+            .then(blog => {
+
+                if (!blog) {
+
+                    return res.status(403).json({ "error": "edit only your blogs !" })
+                }
+
+                return res.status(200).json({ id: blog_id })
+            })
+
+            .catch(err => {
+
+                return res.status(500).json({ "error": err.message })
+            })
+        } 
+        else {
+            
     
         let blog = new Blog ({
             title,
@@ -572,6 +598,8 @@ server.post("/signup", (req, res) => {
 
             return res.status(500).json({ "error": err.message })
         })
+
+        }
     })
 
 

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { BlogContext } from  "../pages/blog.page";
 import { UserContext } from "../App";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
   
 // like, comment, share, edit
 const BlogInteraction = () => {
@@ -10,10 +11,28 @@ const BlogInteraction = () => {
          activity: { total_likes, total_comments },
          author: { personal_info: { username: author_username } }},
 
-        setBlog } = useContext(BlogContext);
+        setBlog, isLikedByUser, setLikedByUser } = useContext(BlogContext);
 
         // logged in check
-        let { userAuth: { username }} = useContext(UserContext);
+        let { userAuth: { username, access_token }} = useContext(UserContext);
+
+        // like toggle
+        const handleLike = () => {
+
+            if (access_token) {
+
+                setLikedByUser(preVal => !preVal);
+
+                !isLikedByUser ? total_likes++ : total_likes--;
+
+                setBlog({ ...blog, activity: { ...activity, total_likes } });
+            }
+
+            else {
+
+                toast.error("login first !")
+            }
+        }
 
     return (
 
@@ -27,9 +46,13 @@ const BlogInteraction = () => {
 
                 <div>
                     {/* like n count */}
-                    <button>
+                    <button onClick={handleLike}>
 
-                        <i className="fi fi-rr-heart"></i>
+                        <i className={"fi " + (isLikedByUser 
+                            ? "fi-sr-heart"
+                            : "fi-rr-heart"
+                        )}></i>
+
                     </button>
 
                     <p>{ total_likes }</p>

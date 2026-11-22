@@ -6,7 +6,7 @@ import defaultBanner from "../imgs/blog banner.png";
 import Tag from "./tags.component";
 import axios from "axios";
 import { UserContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const PublishForm = () => {
@@ -19,6 +19,8 @@ const PublishForm = () => {
     let { userAuth: { access_token } } = useContext(UserContext);
 
     let navigate = useNavigate();
+
+    let { blog_id } = useParams();
 
 
     const handleCloseEvent = () => {
@@ -109,6 +111,8 @@ const PublishForm = () => {
 
             title, banner, des, content, tags
         }
+
+        blogObj.id = blog_id;
 
         // jwt verification and req to server
         axios.post (import.meta.env.VITE_DOMAIN + "/create-blog", blogObj, {
