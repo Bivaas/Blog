@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -10,7 +10,7 @@ import { UserContext } from "../App";
 // like, comment, share, edit
 const BlogInteraction = () => {
 
-    let { blog: { _id, title, blog_id, activity,
+    let { blog, blog: { _id, title, blog_id, activity,
          activity: { total_likes, total_comments },
          author: { personal_info: { username: author_username } }},
 

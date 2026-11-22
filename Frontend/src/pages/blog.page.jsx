@@ -28,7 +28,7 @@ const BlogPage = () => {
 
     const fetchBlog = () => {
 
-        axios.post(import.meta.env.VITE_DOMAIN + "/get-blog/" + { blog_id } )
+        axios.post(import.meta.env.VITE_DOMAIN + "/get-blog", { blog_id } )
         .then (async ( { data: { blog } }) => {
 
             if (!blog) {
@@ -43,7 +43,7 @@ const BlogPage = () => {
             )
             .then(( { data }) => {
 
-                setSimilarBlogs
+                setSimilarBlogs(data.blogs);
             })
 
             // comment attached (5)

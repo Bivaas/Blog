@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 
 import { UserContext } from "../App";
-import { BlogContext } from "../pages.blog.page";
+import { BlogContext } from "../pages/blog.page";
 
 
 const CommentField = ({ action }) => {
@@ -31,7 +31,7 @@ const CommentField = ({ action }) => {
             return toast.error("write something ...");
         }
 
-        axios.post(import.meta.env.VITE_DOMAIN + "/add-component",
+        axios.post(import.meta.env.VITE_DOMAIN + "/add-comment",
 
             { _id, blog_author, comment },
             { headers: { 'Authorization': `Bearer ${access_token}` }}
@@ -50,6 +50,8 @@ const CommentField = ({ action }) => {
 
             // new comment list
             let newCommentArr = [ data ];
+
+            let parentCommentIncrementval = 1;
 
             // blogstate comment
             setBlog({ ...blog, 

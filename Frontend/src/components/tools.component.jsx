@@ -10,7 +10,7 @@ import { uploadImage } from "../common/upload";
 
 
 
-// upload img with url checker gate
+// upload img with url 
 const uploadImageByURL = (e) => {
 
     let link = new Promise((resolve, reject) => {

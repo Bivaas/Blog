@@ -1,6 +1,6 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 import { UserContext } from "../App";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/loader.component";
 

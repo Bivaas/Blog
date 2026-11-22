@@ -12,9 +12,9 @@ const commentSchema = mongoose.Schema ({
 
     blog_author: {
 
-        type: Schema.Types/ObjectId,
+        type: Schema.Types.ObjectId,
         required: true,
-        ref: 'blogs',
+        ref: 'users',
     },
 
     comment: {
@@ -26,14 +26,14 @@ const commentSchema = mongoose.Schema ({
 
     children: {
 
-        type: String,
-        required: true
+        type: [Schema.Types.ObjectId],
+        ref: 'comments'
     },
 
     commented_by: {
 
         type: Schema.Types.ObjectId,
-        require: true,
+        required: true,
         ref: 'users'
     },
 

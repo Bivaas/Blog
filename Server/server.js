@@ -68,7 +68,7 @@ const verifyJWT = (req, res, next) => {
 
 
 
-// usr mongo id encryption with jwt
+// usr mongo id to jwt
 const formatDatatoSend = (user) => {
 
     const access_token = jwt.sign({ id: user._id }, process.env.SECRET_KEY)
@@ -133,7 +133,7 @@ server.post("/signup", (req, res) => {
     
         .catch(err => { 
 
-            // doing email validation because same req is sent twice
+            // doing email validation 
             if(err.code == 11000) {
 
                 let field = Object.keys(err.keyPattern || {})[0] || "";
@@ -259,7 +259,7 @@ server.post("/signup", (req, res) => {
         })
     })
 
-    // get route to render blogs without auth 
+    // get route to latest blogs without auth 
     server.post('/latest-blogs', (req, res) => {
 
         let { page } = req.body;
@@ -447,7 +447,7 @@ server.post("/signup", (req, res) => {
             "personal_info.username": username
         })
 
-        .select("-personal_info.password " + "-google_auth -updatedAi -blogs")
+        .select("-personal_info.password " + "-google_auth -updatedAt -blogs")
 
         .then(user => {
 
@@ -688,12 +688,16 @@ server.post("/signup", (req, res) => {
             return res.status(403).json({ "error": "please write something..." })
         }
 
-        // save
+        // save comment
         let commentObj = {
 
             blog_id: _id, blog_author, comment,
             commented_by: user_id
         }
+
+        new Comment(commentObj).save().then(commentFile => {
+
+            let { comment, commentedAt, children } = commentFile;
 
         // count
         Blog.findOneAndUpdate({ _id }, {
@@ -723,6 +727,8 @@ server.post("/signup", (req, res) => {
     .catch(err => {
 
         return res.status(500).json({ "error": err.message })
+    })
+
     })
 
     // top comments

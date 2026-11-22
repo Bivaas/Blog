@@ -23,7 +23,7 @@ const AboutUser = ({ bio, social_links, joinedAt }) => {
 
                             <Link to={link} key={key} target="_blank">
 
-                                <i className={"fi " + (key != "website" ? "fi-brands-" + key : "fi-rr-blobe") + " text-2xl"}></i> 
+                                <i className={"fi " + (key != "website" ? "fi-brands-" + key : "fi-rr-globe") + " text-2xl"}></i> 
 
                             </Link>
 
