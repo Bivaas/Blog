@@ -467,7 +467,7 @@ server.post("/signup", (req, res) => {
         let { blog_id, draft, mode } = req.body;
         let incrementVal = mode != "edit" ? 1 : 0;
 
-        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": incrementVal }}, { new: true })
+        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": incrementVal }}, { returnRocument: 'after' })
 
         .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
         .select("title des content banner activity publishedAt blog_id tags draft")

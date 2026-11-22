@@ -3,6 +3,8 @@ import axios from "axios";
 
 import { BlogContext } from "../pages/blog.page";
 import CommentField from "./comment-field";
+import CommentCard from "./comment-card";
+import NoDataMessage from "./nodata";
 
 
 // comment page with count
@@ -38,7 +40,7 @@ export const fetchComments = async ({ skip = 0, blog_id, setParentCommentCountFu
 // sidepanel
 const CommentsContainer = () => {
 
-    let { blog: { title }, commentsWrapper, setCommentsWrapper } = useContext(BlogContext);
+    let { blog: { title, comments: { results: commentsArr } }, commentsWrapper, setCommentsWrapper } = useContext(BlogContext);
 
     return (
 
@@ -65,6 +67,16 @@ const CommentsContainer = () => {
             {/* new comment */}
             <CommentField action="comment" />
 
+            {/* comment or empty */}
+            {
+                commentsArr && commentsArr.length ? commentsArr.map ((comment, i) => {
+
+                    return <CommentCard key={i} index={i} leftVal={comment.childrenLevel * 4} commentData={comment} />
+            })
+
+            : <NoDateMessage message="no comments" />
+        }
+        
         </div>
 
         : ""

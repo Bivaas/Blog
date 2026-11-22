@@ -12,7 +12,7 @@ const CommentField = ({ action }) => {
 
     // blog and author id
     let { blog, blog: { _id, author: { _id: blog_author},
-        comments, activity, activity: { total_comments, total_parent_comments }},
+        comments, comments: { results: commentsArr }, activity, activity: { total_comments, total_parent_comments }},
         setBlog, setTotalParentCommentsLoaded } = useContext(BlogContext);  
 
 
@@ -49,7 +49,7 @@ const CommentField = ({ action }) => {
             data.childrenLevel = 0;
 
             // new comment list
-            let newCommentArr = [ data ];
+            let newCommentArr = [ data, ...commentsArr ];
 
             let parentCommentIncrementval = 1;
 
