@@ -1,19 +1,77 @@
 import { getDay } from "../common/date";
 import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 import { UserContext } from "../App";
 import CommentField from "./comment-field";
+import { BlogContext } from "../pages/blog.page";
 
 
 const CommentCard = ({ index, leftVal, commentData }) => {
 
     let { commented_by: { personal_info: 
-        {profile_img, fullname, username }}, commentedAt, comment, _id } = commentData;
+        {profile_img, fullname, username }}, commentedAt, comment, _id, children } = commentData;
 
     let { userAuth: { access_token }} = useContext(UserContext);
 
+    let { blog, blog: { comments, comments: { results: commentsArr} }, setBlog } = useContext(BlogContext); 
+
     const [ isReplying, setReplying ] = useState(false);
+
+
+    // rm replycards below
+    const removeCommentsCards = (startingPoint) => {
+
+        if (commentsArr[startingPoint]) {
+
+            while (commentsArr[startingPoint].childrenLevel > commentData.childrenLevel) {
+
+                commentsArr.splice(startingPoint, 1);
+
+                if (!commentsArr[startingPoint]) {
+
+                    Break;
+                }
+
+            }
+        }
+
+        setBlog ({ ...blog, comments: { ...comments, results: commentsArr } });
+    }
+
+    // comment reply fetch
+    const loadReplies = ({ skip = 0 }) => {
+
+        if (children.length) {
+
+            hideReplies();
+
+            axios.post(import.meta.env.VITE_DOMAIN + "/get-replies", { _id, skip})
+
+            .then(({ data: {replies} }) => {
+
+                commentData.isReplyLoaded = true;
+
+                for (let i = 0; i < replies.length; i++) {
+
+                    replies[i].childrenLevel = commentData.childrenLevel + 1;
+
+                    commentsArr.splice(index + 1 + 1 + skip, 0, replies[i]);
+                }
+
+                setBlog({ ...blog, comments: { ...comments, results: commentsArr } });
+            })
+
+            .catch(err => console.log(err));
+        }
+    }
+
+    const hideReplies = () => {
+
+        commentData.isReplyLoaded = false;
+        removeCommentsCards(index + 1);
+    }
 
     // reply box open/close
     const handleReplyClick = () => {
@@ -44,8 +102,25 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                 <p>{ comment }</p>
 
-                {/* reply btn */}
+                {/* reply btn and hide */}
                 <div>
+
+                    {
+                        commentData.isReplyLoaded ?
+                        <button onClick={hideReplies}>
+
+                            <i className="fi fi-rr-comment-dots"></i>
+                            Hide Reply
+                        </button>
+
+                        : 
+                        // btn hide and N show
+                        <button onClick={loadReplies}>
+
+                            <i className="fi fi-rr-comment-data"></i>
+                            { children.length } Reply
+                        </button>
+                    }
 
                     <button onClick={handleReplyClick}>Reply</button>
 

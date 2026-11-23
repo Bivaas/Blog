@@ -704,6 +704,7 @@ server.post("/signup", (req, res) => {
         if (replying_to) {
 
             commentObj.parent = replying_to;
+            commentObj.reply = true;
         }
 
         new Comment(commentObj).save().then(async commentFile => {
@@ -779,6 +780,44 @@ server.post("/signup", (req, res) => {
         .catch(err => {
 
             console.log(err.message);
+
+            return res.status(500).json({ "error": err.message })
+        })
+    })
+
+    // replies of one comment
+    server.post("/get-replies", (req, res) => {
+
+        let { _id, skip } = req.body;
+
+        let maxLimit = 5;
+
+        Comment.findOne({ _id }).populate ({
+
+            path: "children",
+            options: {
+
+                limit: maxLimit,
+                skip: skip,
+                sort: { 'commentedAt': -1 }
+            },
+
+            populate: {
+
+                path: 'commented_by',
+                select: "personal_info.profile_img " + "personal_info.fullname personal_info.username"
+            },
+
+            select: "-blog_id -updatedAt"
+        })
+
+        .select("children")
+        .then(doc => {
+
+            return res.status(200).json({ replies: doc.children })
+        })
+
+        .catch(err => {
 
             return res.status(500).json({ "error": err.message })
         })
