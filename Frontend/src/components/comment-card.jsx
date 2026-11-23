@@ -11,11 +11,13 @@ import { BlogContext } from "../pages/blog.page";
 const CommentCard = ({ index, leftVal, commentData }) => {
 
     let { commented_by: { personal_info: 
-        {profile_img, fullname, username }}, commentedAt, comment, _id, children } = commentData;
+        {profile_img, fullname, username: commented_by_username }}, commentedAt, comment, _id, children } = commentData;
 
-    let { userAuth: { access_token }} = useContext(UserContext);
+    let { userAuth: { access_token, username }} = useContext(UserContext);
 
-    let { blog, blog: { comments, comments: { results: commentsArr} }, setBlog } = useContext(BlogContext); 
+    let { blog, blog: { comments, comments: { results: commentsArr}, 
+        author: { personal_info: { username: blog_author }} },
+        setBlog } = useContext(BlogContext); 
 
     const [ isReplying, setReplying ] = useState(false);
 
@@ -95,7 +97,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
                 <div>
 
                     <img src={profile_img} />
-                    <p>{ fullname } @{ username}</p>
+                    <p>{ fullname } @{ commented_by_username}</p>
                     <p>{ getDay(commentedAt) }</p>
 
                 </div>
@@ -123,6 +125,12 @@ const CommentCard = ({ index, leftVal, commentData }) => {
                     }
 
                     <button onClick={handleReplyClick}>Reply</button>
+
+                    {
+                        username == commented_by_username || username == blog_author
+                            ? <button> <i className="fi fi-rr-trash pointer-events-none"></i> </button>
+                            : ""
+                    }
 
                 </div>
 
