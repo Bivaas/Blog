@@ -6,7 +6,7 @@ import { UserContext } from "../App";
 import { BlogContext } from "../pages/blog.page";
 
 
-const CommentField = ({ action }) => {
+const CommentField = ({ action, index = undefined, replyingTo = undefined, setReplying }) => {
 
     const [ comment, setComment ] = useState("");
 
@@ -33,7 +33,7 @@ const CommentField = ({ action }) => {
 
         axios.post(import.meta.env.VITE_DOMAIN + "/add-comment",
 
-            { _id, blog_author, comment },
+            { _id, blog_author, comment, replying_to: replyingTo },
             { headers: { 'Authorization': `Bearer ${access_token}` }}
         )
 

@@ -681,7 +681,7 @@ server.post("/signup", (req, res) => {
     server.post("/add-comment", verifyJWT, (req, res) => {
 
         let user_id = req.user;
-        let { _id, comment, blog_author } = req.body;
+        let { _id, comment, blog_author, replying_to } = req.body;
 
         if (!comment.length) {
 
@@ -695,7 +695,12 @@ server.post("/signup", (req, res) => {
             commented_by: user_id
         }
 
-        new Comment(commentObj).save().then(commentFile => {
+        if (replying_to) {
+
+            commentObj.parent = replying_to;
+        }
+
+        new Comment(commentObj).save().then(async commentFile => {
 
             let { comment, commentedAt, children } = commentFile;
 
@@ -703,22 +708,37 @@ server.post("/signup", (req, res) => {
         Blog.findOneAndUpdate({ _id }, {
 
             $push: { "comments": commentFile._id },
-            $inc: { "activity.total_comments": 1, "activity.total_parent_comments": 1 }
+            $inc: { "activity.total_comments": 1, "activity.total_parent_comments": replying_to ? 0 : 1 }
         })
 
         .then(blog => console.log("new comment"));
-        
-        // author noti
-        new Notification({ 
+         
+        // author noti ( comment + reply )
+        let notificationObj = { 
 
-            type: "comment",
+            type: replying_to ? "reply" : "comment",
             blog: _id,
             notification_for: blog_author,
             user: user_id,
             comment: commentFile._id
-        }).save()
+        }
 
-        .then(notification => console.log("new nofification") );
+        if (replying_to) {
+
+            notificationObj.replied_on_comment = replying_to;
+
+            await Comment.findOneAndUpdate({ _id: replying_to }, 
+                { $push: { children: commentFile._id } }
+            )
+
+            .then(replyingToCommentDoc => {
+
+                notificationObj.notification_for = replyingToCommentDoc.commented_by;
+            })
+        }
+
+        new Notification(notificationObj).save()
+        .then(notification => console.log("new notification !"));
 
         return res.status(200).json ({ comment, commentedAt, id: commentFile._id, user_id, children })
         

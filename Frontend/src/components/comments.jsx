@@ -40,7 +40,21 @@ export const fetchComments = async ({ skip = 0, blog_id, setParentCommentCountFu
 // sidepanel
 const CommentsContainer = () => {
 
-    let { blog: { title, comments: { results: commentsArr } }, commentsWrapper, setCommentsWrapper } = useContext(BlogContext);
+    let { blog, blog: { _id, title, comments: { results: commentsArr }, activity: { total_parent_comments } }, commentsWrapper, setCommentsWrapper, totalParentCommentsLoaded, setTotalParentCommentsLoaded, setBlog } = useContext(BlogContext);
+
+    // 5 comment fetch
+    const loadMoreComments = async () => {
+
+        let newCommentsArr = await fetchComments({ 
+
+            skip: totalParentCommentsLoaded,
+            blog_id: _id,
+            setParentCommentCountFun: setTotalParentCommentsLoaded,
+            comment_array: commentsArr
+        });
+
+        setBlog ({ ...blog, comments: newCommentsArr });
+    }
 
     return (
 
@@ -75,6 +89,14 @@ const CommentsContainer = () => {
             })
 
             : <NoDateMessage message="no comments" />
+        }
+
+        {/* more comments on DB than shown */}
+        {
+            total_parent_comments > totalParentCommentsLoaded
+
+            ? <Button onClick={loadMoreComments}>load more..</Button>
+            : ""
         }
         
         </div>
