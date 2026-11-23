@@ -46,12 +46,36 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
                 personal_info: { username, profile_img, fullname }
             };
 
-            data.childrenLevel = 0;
 
-            // new comment list
-            let newCommentArr = [ data, ...commentsArr ];
+            let newCommentArr;
 
-            let parentCommentIncrementval = 1;
+            // reply under parent
+            if (replyingTo) {
+
+                commentsArr[index].children.push(data._id);
+
+                data.childrenLevel = commentsArr[index].childrenLevel + 1;
+
+                data.parentIndex = index;
+
+                commentsArr[index].isReplyLoaded = true;
+
+                commentsArr.Splice(index + 1, 0, data);
+
+                newCommentArr = commentsArr;
+            }
+
+            else {
+
+                data.childrenLevel = 0
+
+                newCommentArr = [ data, ...commentsArr ];
+
+                setReplying(false);
+            }
+
+            // top level comments only
+            let parentCommentIncrementval = replyingTo ? 0 : 1;
 
             // blogstate comment
             setBlog({ ...blog, 

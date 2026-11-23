@@ -140,7 +140,7 @@ const UserAuthForm = ({ type }) => {
                     <InputBox
                     name="password"
                     type="password"
-                    placeholder="Your top secret password"
+                    placeholder="Your top secret password.."
                     icon="fi-rr-key"
                     />
 

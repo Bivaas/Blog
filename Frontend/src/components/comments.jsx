@@ -88,7 +88,7 @@ const CommentsContainer = () => {
                     return <CommentCard key={i} index={i} leftVal={comment.childrenLevel * 4} commentData={comment} />
             })
 
-            : <NoDateMessage message="no comments" />
+            : <NoDataMessage message="no comments" />
         }
 
         {/* more comments on DB than shown */}

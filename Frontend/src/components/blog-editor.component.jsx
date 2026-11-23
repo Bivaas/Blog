@@ -33,6 +33,13 @@ const handleBannerUpload = (e) => {
                 setBlog({ ...blog, banner: url });
             }
 
+            else {
+
+                // imgbb err toast
+                toast.dismiss(loadingToast);
+                toast.error("upload failed !")
+            }
+
         })
         .catch (err => {
 

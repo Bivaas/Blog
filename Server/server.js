@@ -165,6 +165,12 @@ server.post("/signup", (req, res) => {
                 return res.status(403).json({ "error": "Invalid credentials !!"})
             }
 
+
+            // google accounts already
+            if (user.google_auth) {
+
+                return res.status(403).json({ "error": "account already exists, use login with google btn" })
+            }
             
             bcrypt.compare(password, user.personal_info.password, (err, result) => {
 
@@ -467,7 +473,7 @@ server.post("/signup", (req, res) => {
         let { blog_id, draft, mode } = req.body;
         let incrementVal = mode != "edit" ? 1 : 0;
 
-        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": incrementVal }}, { returnRocument: 'after' })
+        Blog.findOneAndUpdate({ blog_id }, { $inc : {"activity.total_reads": incrementVal }}, { returnDocument: 'after' })
 
         .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
         .select("title des content banner activity publishedAt blog_id tags draft")
@@ -740,7 +746,7 @@ server.post("/signup", (req, res) => {
         new Notification(notificationObj).save()
         .then(notification => console.log("new notification !"));
 
-        return res.status(200).json ({ comment, commentedAt, id: commentFile._id, user_id, children })
+        return res.status(200).json ({ comment, commentedAt, _id: commentFile._id, user_id, children })
         
     } )
 
