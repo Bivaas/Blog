@@ -59,24 +59,25 @@ const CommentsContainer = () => {
     return (
 
         commentsWrapper ? 
-        <div>
+        <div className="fixed top-0 right-0 w-[30%] min-w-[350px] h-full z-50 bg-white shadow-2xl p-8 px-16 overflow-y-auto overflow-x-hidden">
 
             {/* label, blog title, close button */}
-            <div>
+            <div className="relative">
 
-                <h1>Comments</h1>
-                <p>{ title }</p>
+                <h1 className="text-xl font-medium">Comments</h1>
+                <p className="text-lg mt-2 w-[70%] line-clamp-1">{ title }</p>
 
                 <button onClick={() => 
 
-                    setCommentsWrapper(preVal => !preVal )}>
+                    setCommentsWrapper(preVal => !preVal )} className="absolute top-0 right-0 flex justify-center items-center w-12 h-12 rounded-full " >
+
                     <i className="fi fi-br-cross"></i>
 
                 </button>
 
             </div>
 
-            <hr />
+            <hr className="my-8 w-[120%] -ml-10" />
 
             {/* new comment */}
             <CommentField action="comment" />
@@ -95,7 +96,8 @@ const CommentsContainer = () => {
         {
             total_parent_comments > totalParentCommentsLoaded
 
-            ? <Button onClick={loadMoreComments}>load more..</Button>
+            ? <Button onClick={loadMoreComments} className="p-2 px-3 rounded-md flex items-center gap-2">load more..</Button>
+            
             : ""
         }
         

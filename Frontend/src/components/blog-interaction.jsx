@@ -70,15 +70,14 @@ const BlogInteraction = () => {
 
 
         <>
-            <hr />
+            <hr className="my-2" />
 
-            <div>
+            <div className="flex gap-6 justify-between">
 
-                <div>
 
-                <div>
+                <div className="flex gap-3 items-center">
                     {/* like n count */}
-                    <button onClick={handleLike}>
+                    <button onClick={handleLike} className={"w-10 h-10 rounded-full flex items-center " + "justify-center " + (isLikedByUser ? "text-red" : "")}>
 
                         <i className={"fi " + (isLikedByUser 
                             ? "fi-sr-heart"
@@ -87,26 +86,23 @@ const BlogInteraction = () => {
 
                     </button>
 
-                    <p>{ total_likes }</p>
+                    <p className="text-xl">{ total_likes }</p>
 
-                </div>
-
-                <div>
+                
                     {/* comment n count */}
-                    <button onClick={() => setCommentsWrapper(preVal => !preVal)}>
+                    <button onClick={() => setCommentsWrapper(preVal => !preVal)} className="w-10 h-10 rounded-full flex items-center justify-center">
 
                         <i className="fi fi-rr-comment-dots"></i>
 
                     </button>
 
-                    <p>{ total_comments }</p>
-
-                </div>
+                    <p className="text-xl">{ total_comments }</p>
+                
 
                 </div>
 
                 {/* edit link */}
-                <div>
+                <div className="flex gap-6 items-center">
 
                     {
                         username == author_username ?
