@@ -15,12 +15,32 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
     let { userAuth: { access_token, username }} = useContext(UserContext);
 
-    let { blog, blog: { comments, comments: { results: commentsArr}, 
+    let { blog, blog: { comments, comments: { results: commentsArr},
+        activity, activity: { total_parent_comments },
         author: { personal_info: { username: blog_author }} },
-        setBlog } = useContext(BlogContext); 
+        setBlog, setTotalParentCommentsLoaded } = useContext(BlogContext); 
 
     const [ isReplying, setReplying ] = useState(false);
 
+    // get reply parent
+    const getParentIndex = () => {
+
+        let startingPoint = index - 1;
+
+        try {
+
+            while (commentsArr[startingPoint].childrenLevel >= commentData.childrenLevel) {
+
+                startingPoint--;
+            }
+
+        } catch {
+
+            startingPoint = undefined;
+        }
+
+        return startingPoint;
+    }
 
     // rm replycards below
     const removeCommentsCards = (startingPoint) => {
@@ -39,7 +59,62 @@ const CommentCard = ({ index, leftVal, commentData }) => {
             }
         }
 
-        setBlog ({ ...blog, comments: { ...comments, results: commentsArr } });
+        // del in end
+        if (isDelete) {
+
+            let parentIndex = getParentIndex();
+
+            if (parentIndex != undefined) {
+
+                commentsArr[parentIndex].children = commentsArr[parentIndex].children
+                 .filter(child => child != _id )
+
+                if (!commentsArr[parentIndex].children.length) {
+
+                    commentsArr[parentIndex].isReplyLoaded = false;
+                }
+            }
+
+            commentsArr.splice(index, 1);
+
+        }
+
+        if (commentData.childrenLevel == 0 && isDelete) {
+
+            setTotalParentCommentsLoaded(preVal => preVal - 1);
+        }
+
+        setBlog ({ ...blog,
+            
+            comments: { ...comments, results: commentsArr },
+            activity: { ...activity, 
+                total_parent_comments: total_parent_comments - (commentData.childrenLevel == 0 && isDelete ? 1 : 0 )
+            }    
+        });
+    }
+
+    // del on server
+    const deleteComment = (e) => {
+
+        e.target.setAttribute("disabled", true);
+
+        axios.post(import.meta.env.VITE_DOMAIN + "/delete-comment",
+
+            { _id },
+            { headers: { 'Authorization': `Bearer ${access_token}`} }
+        )
+
+        .then(() => {
+
+            e.target.removeAttribute("disabled");
+            removeCommentsCard(index + 1, true);
+        })
+
+        .catch(err => {
+
+            e.target.removeAttribute("disabled");
+            toast.error("unable to delete :(");
+        });
     }
 
     // comment reply fetch
@@ -128,7 +203,10 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                     {
                         username == commented_by_username || username == blog_author
-                            ? <button> <i className="fi fi-rr-trash pointer-events-none"></i> </button>
+                            ? <button onClick={deleteComment}>
+
+                                    <i className="fi fi-rr-trash pointer-events-none"></i> 
+                                </button>
                             : ""
                     }
 
