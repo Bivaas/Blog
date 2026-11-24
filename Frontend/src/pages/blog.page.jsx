@@ -101,9 +101,11 @@ const BlogPage = () => {
                         { blog.author.personal_info.fullname }
                         <br />
 
-                        @<Link to={`/user/${blog.author.personal_info.username}`} className="underline"></Link>
-
+                        @<Link to={`/user/${blog.author.personal_info.username}`} className="underline">
+                        
                         { blog.author.personal_info.username }
+                        </Link>
+
                     </p>
 
                     <p className="text-dark-grey ml-auto"> Published on { getDay(blog.publishedAt) }</p>

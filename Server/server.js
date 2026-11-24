@@ -704,7 +704,7 @@ server.post("/signup", (req, res) => {
         if (replying_to) {
 
             commentObj.parent = replying_to;
-            commentObj.reply = true;
+            commentObj.isReply = true;
         }
 
         new Comment(commentObj).save().then(async commentFile => {

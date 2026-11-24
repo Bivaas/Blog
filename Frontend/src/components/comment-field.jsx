@@ -60,9 +60,11 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
 
                 commentsArr[index].isReplyLoaded = true;
 
-                commentsArr.Splice(index + 1, 0, data);
+                commentsArr.splice(index + 1, 0, data);
 
                 newCommentArr = commentsArr;
+
+                setReplying(false);
             }
 
             else {
@@ -71,7 +73,6 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
 
                 newCommentArr = [ data, ...commentsArr ];
 
-                setReplying(false);
             }
 
             // top level comments only
