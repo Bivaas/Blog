@@ -21,8 +21,12 @@ const UserNavigationPanel = () => {
         <div className="bg-white absolute right-0 border border-grey w-60 duration-200"> 
 
             <Link to={`/user/${username}`} className="link pl-8 py-4">Profile</Link>
-            <Link to="/dashboard/blogs" className="link pl-8 py-4">Dashboard</Link>
-            <Link to="/settings/edit-profile" className="link pl-8 py-4">Settings</Link>
+
+            {/* <Link to="/dashboard/blogs" className="link pl-8 py-4">Dashboard</Link> */}
+            <button disabled title="coming soon :)" className="block link pl-8 py-4">Dashboard</button>
+
+            {/* <Link to="/settings/edit-profile" className="link pl-8 py-4">Settings</Link> */}
+            <button disabled title="coming soon :)" className="block link pl-8 py-4">Settings</button>
 
                 <span className="absolute border-t border-grey w-[100%]"></span>
                 

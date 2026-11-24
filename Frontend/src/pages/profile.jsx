@@ -148,7 +148,8 @@ const ProfilePage = () => {
                     {
                         profileId == username ?
 
-                        <Link to="/settings/edit-profile" className="btn-light rounded-md">Edit</Link>
+                        // <Link to="/settings/edit-profile" className="btn-light rounded-md">Edit</Link>
+                        <button disabled title="coming soom :)" className="btn-light rounded-md">Edit</button>
 
                         : ""
                     }
