@@ -43,7 +43,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
     }
 
     // rm replycards below
-    const removeCommentsCards = (startingPoint) => {
+    const removeCommentsCards = (startingPoint, isDelete = false) => {
 
         if (commentsArr[startingPoint]) {
 
@@ -53,7 +53,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                 if (!commentsArr[startingPoint]) {
 
-                    Break;
+                    break;
                 }
 
             }
@@ -107,7 +107,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
         .then(() => {
 
             e.target.removeAttribute("disabled");
-            removeCommentsCard(index + 1, true);
+            removeCommentsCards(index + 1, true);
         })
 
         .catch(err => {
@@ -118,23 +118,23 @@ const CommentCard = ({ index, leftVal, commentData }) => {
     }
 
     // comment reply fetch
-    const loadReplies = ({ skip = 0 }) => {
+    const loadReplies = ({ skip = 0, currentIndex = index }) => {
 
-        if (children.length) {
+        if (commentsArr[currentIndex].children.length) {
 
             hideReplies();
 
-            axios.post(import.meta.env.VITE_DOMAIN + "/get-replies", { _id, skip})
+            axios.post(import.meta.env.VITE_DOMAIN + "/get-replies", { _id: commentsArr[currentIndex]._id, skip})
 
             .then(({ data: {replies} }) => {
 
-                commentData.isReplyLoaded = true;
+                commentsArr[currentIndex].isReplyLoaded = true;
 
                 for (let i = 0; i < replies.length; i++) {
 
-                    replies[i].childrenLevel = commentData.childrenLevel + 1;
+                    replies[i].childrenLevel = commentsArr[currentIndex].childrenLevel + 1;
 
-                    commentsArr.splice(index + 1 + 1 + skip, 0, replies[i]);
+                    commentsArr.splice(currentIndex + 1 + i + skip, 0, replies[i]);
                 }
 
                 setBlog({ ...blog, comments: { ...comments, results: commentsArr } });
@@ -161,6 +161,43 @@ const CommentCard = ({ index, leftVal, commentData }) => {
         setReplying(preVal => !preVal);
     }
 
+    // load more replies btn
+    const LoadMoreRepliesButton = () => {
+
+        let parentIndex = getParentIndex();
+
+        let button = <button onClick={ () => loadReplies({ 
+
+            skip: index - parentIndex, currentIndex: parentIndex 
+        })} className="p-2 px-3 rounded-md flex items-center gap-2">
+
+            load more replies
+        </button>
+    
+
+    if (commentsArr[index + 1]) {
+
+        if (commentsArr[index + 1].childrenLevel < commentsArr[index].childrenLevel) {
+
+            if ( (index - parentIndex) < commentsArr[parentIndex].children.length) {
+
+                return button;
+            }
+        }
+    } 
+
+    else {
+
+        if (parentIndex != undefined) {
+
+            if ( (index - parentIndex) < commentsArr[parentIndex].children.length) {
+
+                return button;
+            }
+        }
+    }
+    }
+
 
     return (
 
@@ -171,7 +208,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                 <div className="flex gap-3 items-center mb-8">
 
-                    <img src={profile_img} />
+                    <img src={profile_img} className="w-6 h-6 rounded-full "/>
                     <p className="line-clamp-1">{ fullname } @{ commented_by_username}</p>
                     <p className="min-w-fit">{ getDay(commentedAt) }</p>
 
@@ -194,7 +231,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
                         // btn hide and N show
                         <button className="p-2 px-3 rounded-md flex items-center gap-2" onClick={loadReplies}>
 
-                            <i className="fi fi-rr-comment-data"></i>
+                            <i className="fi fi-rr-comment-dots"></i>
                             { children.length } Reply
                         </button>
                     }
@@ -223,6 +260,8 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                 : ""
             }
+
+            <LoadMoreRepliesButton />
 
         </div>
     )
