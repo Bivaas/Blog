@@ -105,11 +105,12 @@ const CommentField = ({ action, index = undefined, replyingTo = undefined, setRe
         <textarea 
             value={comment} 
             onChange={(e) => setComment(e.target.value)}
-            placeholder="your comment">
+            placeholder="your comment..."
+            className="input-box pl-5 resize-none h-[150px] overflow-auto">
 
         </textarea>
 
-        <button onClick={handleComment}>{ action }</button>
+        <button className="btn-dark mt-5 px-10" onClick={handleComment} >{ action }</button>
 
         </>
     )

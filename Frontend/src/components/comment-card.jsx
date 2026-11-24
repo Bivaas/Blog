@@ -165,26 +165,26 @@ const CommentCard = ({ index, leftVal, commentData }) => {
     return (
 
         // indent replies with name, time
-        <div style={{ paddingLeft: `${leftVal * 10}px` }}>
+        <div className="w-full" style={{ paddingLeft: `${leftVal * 10}px` }}>
 
-            <div>
+            <div className="my-5 p-6 rounded-md border">
 
-                <div>
+                <div className="flex gap-3 items-center mb-8">
 
                     <img src={profile_img} />
-                    <p>{ fullname } @{ commented_by_username}</p>
-                    <p>{ getDay(commentedAt) }</p>
+                    <p className="line-clamp-1">{ fullname } @{ commented_by_username}</p>
+                    <p className="min-w-fit">{ getDay(commentedAt) }</p>
 
                 </div>
 
-                <p>{ comment }</p>
+                <p className="text-xl ml-3">{ comment }</p>
 
                 {/* reply btn and hide */}
-                <div>
+                <div className="flex gap-5 items-center mt-5">
 
                     {
                         commentData.isReplyLoaded ?
-                        <button onClick={hideReplies}>
+                        <button className="p-2 px-3 rounded-md flex items-center gap-2" onClick={hideReplies}>
 
                             <i className="fi fi-rr-comment-dots"></i>
                             Hide Reply
@@ -192,18 +192,18 @@ const CommentCard = ({ index, leftVal, commentData }) => {
 
                         : 
                         // btn hide and N show
-                        <button onClick={loadReplies}>
+                        <button className="p-2 px-3 rounded-md flex items-center gap-2" onClick={loadReplies}>
 
                             <i className="fi fi-rr-comment-data"></i>
                             { children.length } Reply
                         </button>
                     }
 
-                    <button onClick={handleReplyClick}>Reply</button>
+                    <button className="underline" onClick={handleReplyClick}>Reply</button>
 
                     {
                         username == commented_by_username || username == blog_author
-                            ? <button onClick={deleteComment}>
+                            ? <button className="p-2 px-3 rounded-md border  ml-auto hover:text-red-800 flex items-center" onClick={deleteComment}>
 
                                     <i className="fi fi-rr-trash pointer-events-none"></i> 
                                 </button>
@@ -217,7 +217,7 @@ const CommentCard = ({ index, leftVal, commentData }) => {
             {/* reply box */}
             {
                 isReplying ?
-                <div>
+                <div className="mt-8">
                     <CommentField action="reply" index={index} replyingTo={_id} setReplying={setReplying} />
                 </div>
 

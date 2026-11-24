@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 
@@ -100,7 +100,10 @@ const BlogPage = () => {
                     <p className="capitalize">
                         { blog.author.personal_info.fullname }
                         <br />
-                        @{ blog.author.personal_info.username }
+
+                        @<Link to={`/user/${blog.author.personal_info.username}`} className="underline"></Link>
+
+                        { blog.author.personal_info.username }
                     </p>
 
                     <p className="text-dark-grey ml-auto"> Published on { getDay(blog.publishedAt) }</p>
@@ -129,7 +132,7 @@ const BlogPage = () => {
                 similarBlogs != null && similarBlogs.length ? 
 
                 <>
-                    <h2>Similar Blogs:</h2>
+                    <h2 className="text-2xl mt-14 mb-10 font-medium">Similar Blogs:</h2>
 
                     {
                         similarBlogs.map((similarBlog, i) => {
